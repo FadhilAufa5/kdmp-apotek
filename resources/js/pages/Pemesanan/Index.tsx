@@ -4,71 +4,114 @@ import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import Filters from "@/components/Filters";
 import ProductCard from "@/components/ProductCard";
+import { useState } from "react";
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Medicines',
-        href: 'pemesanan/medicines',
-    },
+  {
+    title: 'Medicines',
+    href: 'pemesanan/medicines',
+  },
 ];
 
-
-
 export default function Index() {
-      const products = [
-    {
-      name: "Paracetamol",
-      price: 15000,
-      stock: 21,
-      category: "Obat",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      name: "Vitamin C",
-      price: 10000,
-      stock: 200,
-      category: "Vitamin",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      name: "Amoxilin",
-      price: 15000,
-      stock: 0,
-      category: "Obat",
-      image: "https://via.placeholder.com/150",
-    },
+  const products = [
+    { name: "Paracetamol", price: 15000, stock: 21, qty:"250ml", category: "Obat", packaging:"Syrup", image: "https://placehold.co/400" },
+    { name: "Vitamin C", price: 10000, stock: 200, qty:"10pcs", category: "Vitamin", packaging:"Kapsul", image: "https://placehold.co/400" },
+    { name: "Amoxilin", price: 15000, stock: 0, qty:"250ml", category: "Antibiotik", packaging:"Syrup", image: "https://placehold.co/400" },
+    { name: "Aspirin", price: 25000, stock: 25, qty:"15pcs", category: "Obat", packaging:"Tablet", image: "https://placehold.co/400" },
+    { name: "Aspirin", price: 25000, stock: 25, qty:"15pcs", category: "Obat", packaging:"Tablet", image: "https://placehold.co/400" },
   ];
-    return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-    <Head title="Medicines" />
-    <div className="flex gap-6 p-6">
-      {/* Sidebar */}
-      <Filters />
 
-      {/* Product Section */}
-      <div className="flex-1">
-        <h1 className="text-2xl font-bold mb-4 text-blue-800">Medicine Catalog</h1>
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState("name-asc");
+  const [filters, setFilters] = useState({ categories: ["Semua Produk"], packages: ["Semua Package"] });
+  const [cart, setCart] = useState<any[]>([]);
 
-        <div className="flex justify-between mb-4">
-          <input
-            type="text"
-            placeholder="Search Products..."
-            className="w-1/2 border px-3 py-2 rounded-md"
-          />
-          <select className="border px-3 py-2 rounded-md">
-            <option>Most Relevant</option>
-            <option>Lowest Price</option>
-            <option>Highest Price</option>
-          </select>
-        </div>
+const addToCart = (product: any) => {
+  setCart((prevCart) => {
+    const existing = prevCart.find((item) => item.name === product.name);
+    if (existing) {
+      return prevCart.map((item) =>
+        item.name === product.name
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+    } else {
+      return [...prevCart, { ...product, quantity: 1 }];
+    }
+  });
+};
 
-        <div className="grid grid-cols-4 gap-4">
-          {products.map((p, i) => (
-            <ProductCard key={i} product={p} />
-          ))}
+  // 🔹 filter berdasarkan search
+  let filteredProducts = products.filter((p) =>
+    p.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  // 🔹 filter berdasarkan kategori
+  if (!filters.categories.includes("Semua Produk")) {
+    filteredProducts = filteredProducts.filter((p) =>
+      filters.categories.includes(p.category)
+    );
+  }
+
+  // 🔹 (Packaging bisa dihubungkan ke produk jika ada field packaging nanti)
+  if (!filters.packages.includes("Semua Package")) {
+    filteredProducts = filteredProducts.filter((p) =>
+      filters.packages.includes(p.packaging)
+    );
+  }
+
+  // 🔹 sort produk
+  if (sortBy === "lowest") {
+    filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price);
+  } else if (sortBy === "highest") {
+    filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
+  } else if (sortBy === "name-asc") {
+    filteredProducts = [...filteredProducts].sort((a, b) => a.name.localeCompare(b.name));
+  } else if (sortBy == "name-desc"){
+    filteredProducts = [...filteredProducts].sort((a, b) => b.name.localeCompare(a.name));
+  }
+
+  return (
+    <AppLayout breadcrumbs={breadcrumbs}>
+      <Head title="Medicines" />
+      <div className="flex gap-6 p-6">
+        {/* Sidebar Filters */}
+        <Filters onFilterChange={setFilters} />
+
+        {/* Product Section */}
+        <div className="flex-1">
+          <h1 className="text-2xl font-bold mb-4 text-blue-800">Medicine Catalog</h1>
+
+          <div className="flex justify-between mb-4">
+            <input
+              type="text"
+              placeholder="Search Products..."
+              className="w-1/2 border px-3 py-2 rounded-md"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+
+            <select
+              className="border px-3 py-2 rounded-md"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option value="name-asc">A → Z</option>
+              <option value="name-desc">Z → A</option>
+              <option value="lowest">Lowest Price</option>
+              <option value="highest">Highest Price</option>
+            </select>
+          </div>
+
+          <div className="grid grid-cols-4 gap-4">
+            {filteredProducts.map((p, i) => (
+              <ProductCard key={i} product={p} addToCart={addToCart} />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
-        </AppLayout>
-    );
+      
+    </AppLayout>
+  );
 }

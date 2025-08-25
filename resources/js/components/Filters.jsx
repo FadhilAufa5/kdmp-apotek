@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-export default function Filters() {
+export default function Filters({ onFilterChange }) {
   const [selectedCategories, setSelectedCategories] = useState(["Semua Produk"]);
   const [selectedPackages, setSelectedPackages] = useState(["Semua Package"]);
 
-  const categories = ["Semua Produk", "Obat", "Vitamin & Suplemen", "Antibiotik"];
+  const categories = ["Semua Produk", "Obat", "Vitamin", "Antibiotik"];
   const packages = ["Semua Package", "Tablet", "Kapsul", "Syrup"];
 
   const toggleSelection = (list, setList, value) => {
@@ -15,10 +15,16 @@ export default function Filters() {
     }
   };
 
+  // 🔹 setiap kali filter berubah, kirim ke parent
+  useEffect(() => {
+    onFilterChange({ categories: selectedCategories, packages: selectedPackages });
+  }, [selectedCategories, selectedPackages]);
+
   return (
     <div className="w-64 p-4 border rounded-lg shadow-sm bg-card text-card-foreground">
       <h2 className="text-xl font-bold mb-4">Filters</h2>
 
+      {/* Category */}
       <div className="mb-4">
         <h3 className="font-semibold mb-2">Categories</h3>
         <ul className="space-y-1">
@@ -37,6 +43,7 @@ export default function Filters() {
         </ul>
       </div>
 
+      {/* Packaging */}
       <div className="mb-4">
         <h3 className="font-semibold mb-2">Packaging</h3>
         <ul className="space-y-1">
@@ -55,6 +62,7 @@ export default function Filters() {
         </ul>
       </div>
 
+      {/* Harga */}
       <div>
         <h3 className="font-semibold mb-2">Range Harga</h3>
         <input type="range" min="0" max="1000000" className="w-full" />
