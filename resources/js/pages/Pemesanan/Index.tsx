@@ -1,10 +1,11 @@
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import Filters from "@/components/Filters";
 import ProductCard from "@/components/ProductCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { ShoppingCart } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -26,19 +27,33 @@ export default function Index() {
   const [sortBy, setSortBy] = useState("name-asc");
   const [filters, setFilters] = useState({ categories: ["Semua Produk"], packages: ["Semua Package"] });
   const [cart, setCart] = useState<any[]>([]);
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+
+    useEffect(() => {
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      setCart(JSON.parse(storedCart));
+    }
+  }, []);
 
 const addToCart = (product: any) => {
   setCart((prevCart) => {
     const existing = prevCart.find((item) => item.name === product.name);
+    let newCart;
     if (existing) {
-      return prevCart.map((item) =>
+      newCart = prevCart.map((item) =>
         item.name === product.name
           ? { ...item, quantity: item.quantity + 1 }
           : item
       );
     } else {
-      return [...prevCart, { ...product, quantity: 1 }];
+      newCart = [...prevCart, { ...product, quantity: 1 }];
     }
+
+    // Simpan ke localStorage
+    localStorage.setItem("cart", JSON.stringify(newCart));
+    return newCart;
   });
 };
 
@@ -111,6 +126,20 @@ const addToCart = (product: any) => {
           </div>
         </div>
       </div>
+<div className="fixed bottom-6 right-6">
+  <a href="/pemesanan/cart" className="relative">
+    <button className="w-14 h-14 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg">
+      <ShoppingCart size={24} />
+    </button>
+
+    {/* 🔹 Badge jumlah item */}
+    {totalItems > 0 && (
+      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+        {totalItems}
+      </span>
+    )}
+  </a>
+</div>
       
     </AppLayout>
   );

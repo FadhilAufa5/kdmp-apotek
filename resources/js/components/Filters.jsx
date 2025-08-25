@@ -7,11 +7,36 @@ export default function Filters({ onFilterChange }) {
   const categories = ["Semua Produk", "Obat", "Vitamin", "Antibiotik"];
   const packages = ["Semua Package", "Tablet", "Kapsul", "Syrup"];
 
-  const toggleSelection = (list, setList, value) => {
-    if (list.includes(value)) {
-      setList(list.filter((v) => v !== value));
+  // 🔹 logic toggle categories
+  const toggleCategory = (cat) => {
+    if (cat === "Semua Produk") {
+      setSelectedCategories(["Semua Produk"]); // reset semua, hanya aktif ini
     } else {
-      setList([...list, value]);
+      let newSelection = selectedCategories.includes(cat)
+        ? selectedCategories.filter((c) => c !== cat)
+        : [...selectedCategories.filter((c) => c !== "Semua Produk"), cat];
+
+      // kalau tidak ada yang dipilih, fallback ke "Semua Produk"
+      if (newSelection.length === 0) {
+        newSelection = ["Semua Produk"];
+      }
+      setSelectedCategories(newSelection);
+    }
+  };
+
+  // 🔹 logic toggle packages
+  const togglePackage = (pack) => {
+    if (pack === "Semua Package") {
+      setSelectedPackages(["Semua Package"]);
+    } else {
+      let newSelection = selectedPackages.includes(pack)
+        ? selectedPackages.filter((p) => p !== pack)
+        : [...selectedPackages.filter((p) => p !== "Semua Package"), pack];
+
+      if (newSelection.length === 0) {
+        newSelection = ["Semua Package"];
+      }
+      setSelectedPackages(newSelection);
     }
   };
 
@@ -34,7 +59,7 @@ export default function Filters({ onFilterChange }) {
                 <input
                   type="checkbox"
                   checked={selectedCategories.includes(cat)}
-                  onChange={() => toggleSelection(selectedCategories, setSelectedCategories, cat)}
+                  onChange={() => toggleCategory(cat)}
                 />
                 {cat}
               </label>
@@ -53,7 +78,7 @@ export default function Filters({ onFilterChange }) {
                 <input
                   type="checkbox"
                   checked={selectedPackages.includes(pack)}
-                  onChange={() => toggleSelection(selectedPackages, setSelectedPackages, pack)}
+                  onChange={() => togglePackage(pack)}
                 />
                 {pack}
               </label>

@@ -11,4 +11,8 @@ class PemesananController extends Controller
     public function index(){
         return Inertia::render('Pemesanan/Index', []);
     }
+
+    public function cart(){
+        return Inertia::render('Pemesanan/Cart', []);
+    }
 }
