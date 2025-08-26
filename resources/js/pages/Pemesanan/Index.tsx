@@ -10,7 +10,7 @@ import { ShoppingCart } from 'lucide-react';
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Medicines',
-    href: 'pemesanan/medicines',
+    href: '/pemesanan/medicines',
   },
 ];
 
@@ -90,25 +90,27 @@ const addToCart = (product: any) => {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Medicines" />
-      <div className="flex gap-6 p-6">
+      <div className="flex flex-col lg:flex-row gap-6 p-6">
         {/* Sidebar Filters */}
-        <Filters onFilterChange={setFilters} />
+        <div className="lg:w-1/4 w-full">
+            <Filters onFilterChange={setFilters} />
+        </div>
 
         {/* Product Section */}
         <div className="flex-1">
           <h1 className="text-2xl font-bold mb-4 text-blue-800">Medicine Catalog</h1>
 
-          <div className="flex justify-between mb-4">
+          <div className="flex flex-col sm:flex-row justify-between gap-2 mb-4">
             <input
               type="text"
               placeholder="Search Products..."
-              className="w-1/2 border px-3 py-2 rounded-md"
+              className="w-full sm:w-1/2 border px-3 py-2 rounded-md"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
 
             <select
-              className="border px-3 py-2 rounded-md"
+              className="w-full sm:w-auto border px-3 py-2 rounded-md"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
             >
@@ -119,22 +121,22 @@ const addToCart = (product: any) => {
             </select>
           </div>
 
-          <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredProducts.map((p, i) => (
-              <ProductCard key={i} product={p} addToCart={addToCart} />
+                <ProductCard key={i} product={p} addToCart={addToCart} />
             ))}
-          </div>
+            </div>
         </div>
       </div>
-<div className="fixed bottom-6 right-6">
+<div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6">
   <a href="/pemesanan/cart" className="relative">
-    <button className="w-14 h-14 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg">
-      <ShoppingCart size={24} />
+    <button className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg">
+      <ShoppingCart size={24} className="sm:size-8" />
     </button>
 
     {/* 🔹 Badge jumlah item */}
     {totalItems > 0 && (
-      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center">
         {totalItems}
       </span>
     )}

@@ -1,7 +1,19 @@
 import AppLayout from "@/layouts/app-layout";
 import { Head, Link } from "@inertiajs/react";
 import { useState, useEffect } from "react";
+import { type BreadcrumbItem } from '@/types';
 
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+    title: 'Medicines',
+    href: '/pemesanan/medicines',
+  },
+  {
+    title: 'Cart',
+    href: '/pemesanan/cart',
+  },
+];
 export default function Cart() {
   const [cart, setCart] = useState<any[]>([]);
 
@@ -34,7 +46,7 @@ export default function Cart() {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <AppLayout>
+    <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Cart" />
       <div className="p-6">
         <h1 className="text-2xl font-bold mb-4 text-blue-800">🛒 Shopping Cart</h1>

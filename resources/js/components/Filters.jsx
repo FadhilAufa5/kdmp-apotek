@@ -46,7 +46,7 @@ export default function Filters({ onFilterChange }) {
   }, [selectedCategories, selectedPackages]);
 
   return (
-    <div className="w-64 p-4 border rounded-lg shadow-sm bg-card text-card-foreground">
+    <div className="lg: w-64 w-full p-4 border rounded-lg shadow-sm bg-card text-card-foreground">
       <h2 className="text-xl font-bold mb-4">Filters</h2>
 
       {/* Category */}
