@@ -2,6 +2,7 @@ import AppLayout from "@/layouts/app-layout";
 import { Head, Link } from "@inertiajs/react";
 import { useState, useEffect } from "react";
 import { type BreadcrumbItem, CartItem } from '@/types';
+import { ShoppingBag } from "lucide-react";
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -43,7 +44,9 @@ export default function Cart() {
     localStorage.setItem("cart", JSON.stringify(updated));
   };
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const ppn = subtotal * 0.11;
+  const grandTotal = subtotal + ppn;
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -52,7 +55,10 @@ export default function Cart() {
         <h1 className="text-2xl font-bold mb-4 text-blue-800">🛒 Shopping Cart</h1>
 
         {cart.length === 0 ? (
-          <div className="text-gray-600">Cart is empty.</div>
+          <div className="flex flex-col items-center justify-center h-84 text-gray-500">
+            <ShoppingBag size={80} className="mb-4" />
+            <p className="text-xl font-medium">Anda belum memesan barang apapun</p>
+          </div>
         ) : (
           <div className="space-y-4">
             {cart.map((item, i) => (
@@ -100,12 +106,22 @@ export default function Cart() {
                 </div>
               </div>
             ))}
+<div className="text-lg mt-6 space-y-2 w-80 ml-auto bg-blue-300 rounded-md p-4 ">
+  <div className="grid grid-cols-2">
+    <span>Sub Total :</span>
+    <span className="text-right">Rp{subtotal.toLocaleString()}</span>
+  </div>
+  <div className="grid grid-cols-2">
+    <span>PPn (11%) :</span>
+    <span className="text-right">Rp{ppn.toLocaleString()}</span>
+  </div>
+  <div className="text-blue-800 grid grid-cols-2 text-xl font-bold mt-6">
+    <span>Total :</span>
+    <span className="text-right">Rp{grandTotal.toLocaleString()}</span>
+  </div>
+</div>
 
-            <div className="text-right font-bold text-lg mt-6">
-              Total: Rp {total.toLocaleString()}
-            </div>
-
-            <div className="text-right">
+            <div className="text-right mt-10">
               <button className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">
                 Checkout
               </button>
