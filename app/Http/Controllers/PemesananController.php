@@ -15,4 +15,9 @@ class PemesananController extends Controller
     public function cart(){
         return Inertia::render('Pemesanan/Cart', []);
     }
+
+    public function po(){
+        return Inertia::render('Pemesanan/PO', []);
+    }
+
 }

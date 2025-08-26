@@ -122,9 +122,14 @@ export default function Cart() {
 </div>
 
             <div className="text-right mt-10">
+              <Link
+                href={route('po')}
+                className="mr-4 inline-block text-blue-600 hover:underline"
+                >
               <button className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">
                 Checkout
               </button>
+              </Link>
             </div>
           </div>
         )}
