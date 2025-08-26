@@ -271,7 +271,7 @@ export default function PurchaseOrderPage() {
             <Button variant="outline" onClick={() => setShowSaveDialog(false)}>
               Batal
             </Button>
-            <Link href="/pemesanan/medicines">
+            <Link href="/pemesanan/history">
               <Button>Ya, Simpan</Button>
             </Link>
           </DialogFooter>

@@ -106,20 +106,20 @@ export default function Cart() {
                 </div>
               </div>
             ))}
-<div className="text-lg mt-6 space-y-2 w-80 ml-auto bg-blue-300 rounded-md p-4 ">
-  <div className="grid grid-cols-2">
-    <span>Sub Total :</span>
-    <span className="text-right">Rp{subtotal.toLocaleString()}</span>
-  </div>
-  <div className="grid grid-cols-2">
-    <span>PPn (11%) :</span>
-    <span className="text-right">Rp{ppn.toLocaleString()}</span>
-  </div>
-  <div className="text-blue-800 grid grid-cols-2 text-xl font-bold mt-6">
-    <span>Total :</span>
-    <span className="text-right">Rp{grandTotal.toLocaleString()}</span>
-  </div>
-</div>
+            <div className="flex flex-col items-end mt-6 space-y-2">
+              <div className="flex justify-between w-64 text-gray-700">
+                <span>Subtotal</span>
+                <span>Rp {subtotal.toLocaleString()}</span>
+              </div>
+                <div className="flex justify-between w-64 text-gray-700">
+                  <span>PPN (11%)</span>
+                  <span>Rp {ppn.toLocaleString()}</span>
+                </div>
+              <div className="flex justify-between w-64 border-t pt-2 mt-2 text-xl font-bold text-blue-800">
+                <span>Total</span>
+                <span>Rp {grandTotal.toLocaleString()}</span>
+              </div>
+            </div>
 
             <div className="text-right mt-10">
               <Link

@@ -20,4 +20,8 @@ class PemesananController extends Controller
         return Inertia::render('Pemesanan/PO', []);
     }
 
+    public function history(){
+        return Inertia::render('Pemesanan/History', []);
+    }
+
 }
