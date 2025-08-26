@@ -1,7 +1,7 @@
 import AppLayout from "@/layouts/app-layout";
 import { Head, Link } from "@inertiajs/react";
 import { useState, useEffect } from "react";
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, CartItem } from '@/types';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -15,7 +15,7 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 export default function Cart() {
-  const [cart, setCart] = useState<any[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
 
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");

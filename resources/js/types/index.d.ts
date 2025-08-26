@@ -28,6 +28,15 @@ export type NavSection = {
   isActive?: boolean;
 }
 
+export interface CartItem {
+  name: string;
+  image: string;
+  qty: string;
+  packaging: string;
+  price: number;
+  quantity: number;
+}
+
 export interface SharedData {
     name: string;
     quote: { message: string; author: string };

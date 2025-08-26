@@ -1,53 +1,55 @@
 import React, { useState, useEffect } from "react";
 
 export default function Filters({ onFilterChange }) {
-  const [selectedCategories, setSelectedCategories] = useState(["Semua Produk"]);
-  const [selectedPackages, setSelectedPackages] = useState(["Semua Package"]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedPackages, setSelectedPackages] = useState([]);
 
-  const categories = ["Semua Produk", "Obat", "Vitamin", "Antibiotik"];
-  const packages = ["Semua Package", "Tablet", "Kapsul", "Syrup"];
+  const categories = ["Obat", "Vitamin", "Antibiotik"];
+  const packages = ["Tablet", "Kapsul", "Syrup"];
 
-  // 🔹 logic toggle categories
+  // toggle category
   const toggleCategory = (cat) => {
-    if (cat === "Semua Produk") {
-      setSelectedCategories(["Semua Produk"]); // reset semua, hanya aktif ini
+    if (selectedCategories.includes(cat)) {
+      setSelectedCategories(selectedCategories.filter((c) => c !== cat));
     } else {
-      let newSelection = selectedCategories.includes(cat)
-        ? selectedCategories.filter((c) => c !== cat)
-        : [...selectedCategories.filter((c) => c !== "Semua Produk"), cat];
-
-      // kalau tidak ada yang dipilih, fallback ke "Semua Produk"
-      if (newSelection.length === 0) {
-        newSelection = ["Semua Produk"];
-      }
-      setSelectedCategories(newSelection);
+      setSelectedCategories([...selectedCategories, cat]);
     }
   };
 
-  // 🔹 logic toggle packages
+  // toggle package
   const togglePackage = (pack) => {
-    if (pack === "Semua Package") {
-      setSelectedPackages(["Semua Package"]);
+    if (selectedPackages.includes(pack)) {
+      setSelectedPackages(selectedPackages.filter((p) => p !== pack));
     } else {
-      let newSelection = selectedPackages.includes(pack)
-        ? selectedPackages.filter((p) => p !== pack)
-        : [...selectedPackages.filter((p) => p !== "Semua Package"), pack];
-
-      if (newSelection.length === 0) {
-        newSelection = ["Semua Package"];
-      }
-      setSelectedPackages(newSelection);
+      setSelectedPackages([...selectedPackages, pack]);
     }
   };
 
-  // 🔹 setiap kali filter berubah, kirim ke parent
+  // clear all filters
+  const clearAllFilters = () => {
+    setSelectedCategories([]);
+    setSelectedPackages([]);
+  };
+
+  // kirim ke parent setiap kali filter berubah
   useEffect(() => {
-    onFilterChange({ categories: selectedCategories, packages: selectedPackages });
+    onFilterChange({
+      categories: selectedCategories,
+      packages: selectedPackages,
+    });
   }, [selectedCategories, selectedPackages]);
 
   return (
-    <div className="lg: w-64 w-full p-4 border rounded-lg shadow-sm bg-card text-card-foreground">
-      <h2 className="text-xl font-bold mb-4">Filters</h2>
+    <div className="lg:w-64 w-full p-4 border rounded-lg shadow-sm bg-card text-card-foreground">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-bold">Filters</h2>
+        <button
+          onClick={clearAllFilters}
+          className="text-sm text-blue-500 hover:underline"
+        >
+          Clear All
+        </button>
+      </div>
 
       {/* Category */}
       <div className="mb-4">
