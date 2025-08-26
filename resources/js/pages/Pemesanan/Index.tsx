@@ -18,11 +18,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Index() {
   const products = [
-    { name: "Paracetamol", price: 15000, stock: 21, qty:"250ml", category: "Obat", packaging:"Syrup", image: "https://placehold.co/400", description: "Obat penurun panas dan pereda nyeri." },
-    { name: "Vitamin C", price: 10000, stock: 200, qty:"10pcs", category: "Vitamin", packaging:"Kapsul", image: "https://placehold.co/400", description: "Vitamin untuk meningkatkan daya tahan tubuh." },
-    { name: "Amoxilin", price: 15000, stock: 0, qty:"250ml", category: "Antibiotik", packaging:"Syrup", image: "https://placehold.co/400", description: "Antibiotik untuk mengobati infeksi bakteri." },
-    { name: "Aspirin", price: 25000, stock: 25, qty:"15pcs", category: "Obat", packaging:"Tablet", image: "https://placehold.co/400", description: "Obat untuk meredakan nyeri dan peradangan." },
-    { name: "Batugin", price: 65000, stock: 25, qty:"15pcs", category: "Obat", packaging:"Syrup", image: "https://placehold.co/400", description: "meluruhkan batu ginjal atau batu saluran kemih." },
+    { name: "KF FACIAL TISSUE 200S ANIMAL", price: 15000, stock: 20, qty:"10pcs", category: "Barang", packaging:"Barang", image: "https://placehold.co/400", description: "Tisu wajah isi besar, lembut dan aman untuk kulit wajah sehari-hari.." },
+    { name: "FITUNO TAB SALUT (BLISTER 3X10 TAB)-BJN", price: 10000, stock: 20, qty:"10pcs", category: "Obat", packaging:"Tablet", image: "https://placehold.co/400", description: "Suplemen herbal untuk bantu tingkatkan daya tahan tubuh dan pemulihan stamina." },
+    { name: "", price: 15000, stock: 0, qty:"250ml", category: "Antibiotik", packaging:"Syrup", image: "https://placehold.co/400", description: "" },
+    { name: "ENKASARI HERBAL 120ML", price: 25000, stock: 20, qty:"15pcs", category: "Obat", packaging:"Tablet", image: "https://placehold.co/400", description: "Cairan kumur herbal alami untuk menjaga kesehatan mulut dan tenggorokan. Formulanya membantu mengatasi bau mulut, sariawan, dan meredakan radang tenggorokan. Dengan bahan-bahan pilihan, memberikan sensasi segar dan nyaman setelah digunakan. Ideal untuk kebersihan mulut sehari-hari." },
+    { name: "MAGASIDA TABLET (DUS 10 TAB)-BJN", price: 20000, stock: 20, qty:"15pcs", category: "Obat", packaging:"Tablet", image: "https://placehold.co/400", description: "Obat yang digunakan untuk mengatasi gangguan pada saluran pencernaan seperti gastritis, perut kembung, maag, dispepsia, hiatus hernia, tukak lambung dan tukak usus duabelas jari" },
+    { name: "BATUGIN ELIXIR BT 120 ML - BJN", price: 65000, stock: 20, qty:"15pcs", category: "Obat", packaging:"Syrup", image: "https://placehold.co/400", description: "Obat herbal pereda batu ginjal, sirup 120ml dari BJN" },
   ];
 
   const [search, setSearch] = useState("");
