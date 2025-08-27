@@ -8,7 +8,7 @@ export default function AppLogo() {
             </div>
             <div className="text-left text-sm md:text-base">
                 <span className="block font-semibold leading-tight truncate">
-                    KFA x KDMP
+                    KFAPOTEK
                 </span>
             </div>
         </div>

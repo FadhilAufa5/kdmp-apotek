@@ -1,5 +1,6 @@
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
+import { Package, ClipboardList } from "lucide-react";
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
@@ -14,14 +15,15 @@ export default function Welcome() {
                 />
             </Head>
 
-            <div className="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
-                {/* Header Nav */}
-                <header className="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
-                    <nav className="flex items-center justify-end gap-4">
+            <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 text-[#1b1b18] p-6">
+                
+                {/* Navbar */}
+                <header className="absolute top-0 right-0 p-6 w-full max-w-7xl flex justify-end">
+                    <nav className="flex items-center gap-4 text-sm">
                         {auth.user ? (
                             <Link
                                 href={route('dashboard')}
-                                className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                className="rounded-lg border px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
                             >
                                 Dashboard
                             </Link>
@@ -29,13 +31,13 @@ export default function Welcome() {
                             <>
                                 <Link
                                     href={route('login')}
-                                    className="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
+                                    className="rounded-lg px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
                                 >
                                     Log in
                                 </Link>
                                 <Link
                                     href={route('register')}
-                                    className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                                    className="rounded-lg border px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
                                 >
                                     Register
                                 </Link>
@@ -44,59 +46,64 @@ export default function Welcome() {
                     </nav>
                 </header>
 
-                {/* Logo dan Teks Selamat Datang */}
-                <div className="mb-10 text-center">
-                    <img src="/Logo KFA member of BioFarma 300x300-01.png" alt="Logo" className="mx-auto h-20 w-auto mb-4" />
-                    <h1 className="text-2xl font-semibold dark:text-white">
+                {/* Logo dan Greeting */}
+                <div className="text-center mt-20 mb-10">
+                    <img
+                        src="/Logo KFA member of BioFarma 300x300-01.png"
+                        alt="Logo"
+                        className="mx-auto h-24 w-auto mb-4 drop-shadow-md"
+                    />
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                         Selamat Datang, {auth.user?.name || 'Pengguna'} 👋
                     </h1>
-                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                    <p className="mt-2 text-gray-600 dark:text-gray-400 text-base">
                         Silakan pilih modul yang ingin Anda akses di bawah ini
                     </p>
                 </div>
 
-                {/* Card Menu */}
-                <div className="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 max-w-4xl w-full">
-                    
-                        {/* Pemesanan Barang Card */}
-                        <Link
-                            href="pemesanan/medicines"
-                            className="group rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-[#1a1a1a]"
-                        >
-                            <div className="flex flex-col items-start gap-3">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors">
-                                    📝
-                                </div>
-                                <h2 className="text-lg font-semibold text-gray-900 group-hover:text-green-600 dark:text-white">
-                                    Pemesanan Barang
-                                </h2>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    Buat dan kelola pesanan barang sesuai kebutuhan operasional.
-                                </p>
+                {/* Cards Menu */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
+                    {/* Pemesanan Barang */}
+                    <Link
+                        href="pemesanan/medicines"
+                        className="group relative rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all"
+                    >
+                        <div className="flex flex-col items-start gap-4">
+                            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-green-100 text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors">
+                                <ClipboardList className="w-6 h-6" />
                             </div>
-                        </Link>
-                        {/* Penerimaan Barang Card */}
-                        <Link
-                            href="/penerimaan"
-                            className="group rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-[#1a1a1a]"
-                        >
-                            <div className="flex flex-col items-start gap-3">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                    📦
-                                </div>
-                                <h2 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 dark:text-white">
-                                    Penerimaan Barang
-                                </h2>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    Kelola dan catat proses penerimaan barang dengan mudah dan cepat.
-                                </p>
+                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-green-600">
+                                Pemesanan Barang
+                            </h2>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                                Buat dan kelola pesanan barang sesuai kebutuhan operasional.
+                            </p>
+                        </div>
+                    </Link>
+
+                    {/* Penerimaan Barang */}
+                    <Link
+                        href="/penerimaan"
+                        className="group relative rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all"
+                    >
+                        <div className="flex flex-col items-start gap-4">
+                            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                <Package className="w-6 h-6" />
                             </div>
-                        </Link>
-                    </div>
+                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600">
+                                Penerimaan Barang
+                            </h2>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                                Kelola dan catat proses penerimaan barang dengan mudah dan cepat.
+                            </p>
+                        </div>
+                    </Link>
                 </div>
 
-                <div className="hidden h-14.5 lg:block"></div>
+                {/* Footer */}
+                <footer className="mt-16 text-sm text-gray-500 dark:text-gray-400">
+                    © {new Date().getFullYear()} KFA - All rights reserved
+                </footer>
             </div>
         </>
     );

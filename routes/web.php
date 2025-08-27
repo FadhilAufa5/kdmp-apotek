@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\PenerimaanController;
+use App\Http\Controllers\ProcessOrderController;
 use App\Http\Controllers\PurchaseOrderController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -14,14 +15,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
-    Route::get('pemesanan/medicines', [PemesananController::class , 'index'])->name('medicines');
-    Route::get('pemesanan/cart', [PemesananController::class , 'cart'])->name('cart');
-    Route::get('pemesanan/po', [PemesananController::class , 'po'])->name('po');
-    Route::get('pemesanan/history', [PemesananController::class , 'history'])->name('history');
-    Route::get('penerimaan', [PenerimaanController::class , 'index'])->name('penerimaan');
-    Route::get('penerimaan/history', [PenerimaanController::class , 'create'])->name('history');
-    // Route::get('pemesanan/po', [PurchaseOrderController::class, 'create'])->name('po.create');
-    // Route::post('pemesanan/po', [PurchaseOrderController::class, 'store'])->name('po.store');
+    Route::get('purchase', [PurchaseOrderController::class, 'index'])->name('purchase.index');
+    Route::get('purchase/show/{id}', [PurchaseOrderController::class, 'show'])->name('purchase.show');
+    Route::get('process', [ProcessOrderController::class, 'index'])->name('process.index');
+    Route::get('process/delivery/{id}', [ProcessOrderController::class, 'show'])->name('process.delivery');
+    Route::get('process/order/{id}', [ProcessOrderController::class, 'order'])->name('process.order');
+    
 });
 
 require __DIR__.'/settings.php';

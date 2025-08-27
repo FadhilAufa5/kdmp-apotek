@@ -1,128 +1,154 @@
 import { Card, CardContent } from "@/components/ui/card";
 import AppLayout from "@/layouts/app-layout";
 import { type BreadcrumbItem } from "@/types";
-import { Head } from "@inertiajs/react";
-import { ShoppingCart, Package, Wallet } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { Head, usePage } from "@inertiajs/react"; // ⬅️ tambahin usePage
+import { Clock, CheckCircle, XCircle, ListChecks } from "lucide-react";
 
 const breadcrumbs: BreadcrumbItem[] = [
   { title: "Dashboard", href: "/dashboard" },
 ];
 
-export default function Dashboard() {
-  // 🔹 Data dummy transaksi (bisa diambil dari API/backend)
-  const transactions = [
-    { id: "TO-001", items: 80, price: 2000000, date: "2025-07-18" },
-    { id: "TO-002", items: 56, price: 918000, date: "2025-06-18" },
-    { id: "TO-003", items: 12, price: 199800, date: "2025-08-18" },
-    { id: "TO-004", items: 21, price: 555000, date: "2025-09-18" },
+export default function DashboardOrders() {
+  const { auth }: any = usePage().props; 
+  const adminName = auth?.user?.name || "Admin"; // fallback kalau tidak ada nama
+
+  // Dummy data untuk orders
+  const stats = {
+    total: 6,
+    pending: 2,
+    accepted: 2,
+    rejected: 1,
+  };
+
+  const recentOrders = [
+    { id: "PO 001", koperasi: "Koperasi Desa Purwokerto", price: 199800, status: "Pending" },
+    { id: "PO 002", koperasi: "Koperasi Desa Purworejo", price: 214900, status: "Accepted" },
+    { id: "PO 003", koperasi: "Koperasi Desa Bangka Belitung", price: 68900, status: "Accepted" },
+    { id: "PO 004", koperasi: "Koperasi Desa Aceh", price: 421600, status: "Pending" },
+    { id: "PO 005", koperasi: "Koperasi Desa Solo", price: 9900, status: "Rejected" },
   ];
 
-  const totalTransactions = transactions.length;
-  const totalItems = transactions.reduce((sum, t) => sum + t.items, 0);
-  const totalSpent = transactions.reduce((sum, t) => sum + t.price, 0);
-
-  // 🔹 Contoh data grafik bulanan
-  const chartData = [
-    { month: "Jan", transaksi: 3 },
-    { month: "Feb", transaksi: 5 },
-    { month: "Mar", transaksi: 2 },
-    { month: "Apr", transaksi: 4 },
-    { month: "May", transaksi: 1 },
-    { month: "Jun", transaksi: 3 },
-    { month: "Jul", transaksi: 6 },
-    { month: "Aug", transaksi: 4 },
+  const notifications = [
+    { message: "New urgent purchase order from Koperasi Desa Aceh", time: "9:12:45 AM" },
+    { message: "Koperasi Desa Ngawi telah menunggu 5 Hari semenjak PO", time: "5:06:12 AM" },
+    { message: "2 Unit Koperasi berhasil diterima pagi ini", time: "2:11:26 AM" },
   ];
+
+  const statusColors: Record<string, string> = {
+    Pending: "bg-yellow-100 text-yellow-700",
+    Accepted: "bg-green-100 text-green-700",
+    Rejected: "bg-red-100 text-red-700",
+  };
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Dashboard" />
+      <Head title="Dashboard Orders" />
       <div className="flex flex-1 flex-col gap-6 p-4 md:p-6 overflow-x-auto">
+        
+        {/* Welcome Section */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold">
+            Selamat Datang, {adminName}! 👋
+          </h1>
+          <p className="text-gray-600">
+            Semoga harimu menyenangkan!  Berikut ringkasan pesanan koperasi hari ini.
+          </p>
+        </div>
+
         {/* Summary Cards */}
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-          <Card className="rounded-xl shadow-md">
-            <CardContent className="p-6 flex items-center gap-4">
-              <div className="p-3 rounded-full bg-blue-100 text-blue-600">
-                <ShoppingCart size={24} />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Total Transaksi</p>
-                <h3 className="text-xl font-bold">{totalTransactions}</h3>
-              </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card>
+            <CardContent className="p-4 flex flex-col items-center justify-center">
+              <ListChecks className="text-blue-600 mb-2" size={32} />
+              <h3 className="text-lg font-bold">{stats.total}</h3>
+              <p className="text-gray-500 text-sm">Total Orders Today</p>
             </CardContent>
           </Card>
 
-          <Card className="rounded-xl shadow-md">
-            <CardContent className="p-6 flex items-center gap-4">
-              <div className="p-3 rounded-full bg-green-100 text-green-600">
-                <Package size={24} />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Jumlah Barang Dibeli</p>
-                <h3 className="text-xl font-bold">{totalItems}</h3>
-              </div>
+          <Card>
+            <CardContent className="p-4 flex flex-col items-center justify-center">
+              <Clock className="text-yellow-600 mb-2" size={32} />
+              <h3 className="text-lg font-bold">{stats.pending}</h3>
+              <p className="text-gray-500 text-sm">Pending Orders</p>
             </CardContent>
           </Card>
 
-          <Card className="rounded-xl shadow-md">
-            <CardContent className="p-6 flex items-center gap-4">
-              <div className="p-3 rounded-full bg-yellow-100 text-yellow-600">
-                <Wallet size={24} />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Total Pengeluaran</p>
-                <h3 className="text-xl font-bold">
-                  Rp {totalSpent.toLocaleString("id-ID")},00
-                </h3>
-              </div>
+          <Card>
+            <CardContent className="p-4 flex flex-col items-center justify-center">
+              <CheckCircle className="text-green-600 mb-2" size={32} />
+              <h3 className="text-lg font-bold">{stats.accepted}</h3>
+              <p className="text-gray-500 text-sm">Accepted Orders</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-4 flex flex-col items-center justify-center">
+              <XCircle className="text-red-600 mb-2" size={32} />
+              <h3 className="text-lg font-bold">{stats.rejected}</h3>
+              <p className="text-gray-500 text-sm">Rejected Orders</p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Grafik Transaksi Bulanan */}
-        <Card className="rounded-xl shadow-md">
-          <CardContent className="p-4 md:p-6">
-            <h3 className="text-lg font-bold mb-4">Statistik Transaksi per Bulan</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="transaksi" fill="#3b82f6" radius={[8, 8, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        {/* Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          {/* Recent Orders */}
+          <Card className="lg:col-span-2">
+            <CardContent className="p-4">
+              <h3 className="text-lg font-bold mb-4">Recent Purchase Orders</h3>
+              <div className="flex flex-col gap-3">
+                {recentOrders.map((order) => (
+                  <div
+                    key={order.id}
+                    className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-full bg-blue-100 text-blue-600">
+                        <ListChecks size={20} />
+                      </div>
+                      <div>
+                        <p className="font-semibold">{order.id}</p>
+                        <p className="text-sm text-gray-500">{order.koperasi}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="font-semibold">
+                        Rp {order.price.toLocaleString("id-ID")},00
+                      </span>
+                      <span className={`px-3 py-1 text-xs font-medium rounded-full ${statusColors[order.status]}`}>
+                        {order.status}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
-        {/* Transaksi Terbaru */}
-        <Card className="rounded-xl shadow-md">
-          <CardContent className="p-4 md:p-6">
-            <h3 className="text-lg font-bold mb-4">Transaksi Terbaru</h3>
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-sm border-collapse">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="px-4 py-2 text-left">ID</th>
-                    <th className="px-4 py-2 text-left">Tanggal</th>
-                    <th className="px-4 py-2 text-left">Barang</th>
-                    <th className="px-4 py-2 text-left">Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transactions.map((t) => (
-                    <tr key={t.id} className="border-b hover:bg-gray-50">
-                      <td className="px-4 py-2">{t.id}</td>
-                      <td className="px-4 py-2">{t.date}</td>
-                      <td className="px-4 py-2">{t.items}</td>
-                      <td className="px-4 py-2">Rp {t.price.toLocaleString("id-ID")},00</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
+          {/* Notifications */}
+          <Card>
+            <CardContent className="p-4">
+              <h3 className="text-lg font-bold mb-4">Notifications</h3>
+              <div className="flex flex-col gap-3">
+                {notifications.map((notif, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-3 p-3 border rounded-lg hover:bg-gray-50"
+                  >
+                    <div className="text-gray-500">
+                      <Clock size={18} />
+                    </div>
+                    <div>
+                      <p className="text-sm">{notif.message}</p>
+                      <p className="text-xs text-gray-400">{notif.time}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </AppLayout>
   );

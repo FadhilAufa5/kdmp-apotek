@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, ShoppingCart, History } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, ShoppingCart, History, Box } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const sections = [
@@ -15,17 +15,10 @@ const sections = [
         ],
     },
     {
-        title: "Pemesanan",
+        title: "Data",
         items: [
-            { title: "Medicines", href: "/pemesanan/medicines", icon: ShoppingCart },
-            { title: "Orders History", href: "/pemesanan/history", icon: History },
-        ],
-    },
-    {
-        title: "Penerimaan",
-        items: [
-            { title: "Penerimaan Form", href: "/penerimaan", icon: BookOpen },
-            { title: "Penerimaan History", href: "/penerimaan/history", icon: History },
+            { title: "Purchase Orders", href: "/purchase", icon: ShoppingCart },
+            { title: "Process Orders", href: "/process", icon: Box },
         ],
     },
 ];
