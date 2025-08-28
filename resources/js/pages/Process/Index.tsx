@@ -109,9 +109,13 @@ export default function ProcessOrders() {
                         <Eye className="w-4 h-4 text-blue-600" />
                     </Button>
                     </Link>
+
+                    <Link href={route("process.order", po.id)}>
                     <Button variant="ghost" size="icon">
                       <Truck className="w-4 h-4 text-green-600" />
                     </Button>
+                    </Link>
+
                     <Button variant="ghost" size="icon">
                       <X className="w-4 h-4 text-red-600" />
                     </Button>
