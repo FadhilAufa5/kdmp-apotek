@@ -5,7 +5,7 @@ import { Search, Filter, Eye, Check, X } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 const mockPOs = [
   {
@@ -45,13 +45,32 @@ const statusColor = {
 export default function PurchaseOrders() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
-  const [selectedPO, setSelectedPO] = useState<any>(null);
+  const [pos, setPos] = useState(mockPOs);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedPO, setSelectedPO] = useState<string | null>(null);
 
-  const filteredPOs = mockPOs.filter((po) => {
+  const filteredPOs = pos.filter((po) => {
     const matchSearch = po.id.toLowerCase().includes(search.toLowerCase());
     const matchStatus = statusFilter === "ALL" || po.status === statusFilter;
     return matchSearch && matchStatus;
   });
+
+  const handleReject = (poId: string) => {
+    setSelectedPO(poId);
+    setModalOpen(true);
+  };
+
+  const confirmReject = () => {
+    if (selectedPO) {
+      setPos((prev) =>
+        prev.map((po) =>
+          po.id === selectedPO ? { ...po, status: "Rejected" } : po
+        )
+      );
+      setSelectedPO(null);
+      setModalOpen(false);
+    }
+  };
 
   return (
     <AppLayout breadcrumbs={[{ title: "Dashboard", href: "/dashboard" }, { title: "Purchase Orders", href: "/purchase-orders" }]}>
@@ -119,15 +138,16 @@ export default function PurchaseOrders() {
                   </td>
                   <td className="p-3 flex gap-2">
                     <Link href={route("purchase.show", po.id)}>
-                    <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon">
                         <Eye className="w-4 h-4 text-blue-600" />
-                    </Button>
+                      </Button>
                     </Link>
 
                     <Button variant="ghost" size="icon">
                       <Check className="w-4 h-4 text-green-600" />
                     </Button>
-                    <Button variant="ghost" size="icon">
+
+                    <Button variant="ghost" size="icon" onClick={() => handleReject(po.id)}>
                       <X className="w-4 h-4 text-red-600" />
                     </Button>
                   </td>
@@ -138,6 +158,19 @@ export default function PurchaseOrders() {
         </Card>
       </div>
 
+      {/* Reject Confirmation Modal */}
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reject Purchase Order</DialogTitle>
+          </DialogHeader>
+          <p>Are you sure you want to reject PO {selectedPO}?</p>
+          <DialogFooter className="flex justify-end gap-2 mt-4">
+            <Button variant="outline" onClick={() => setModalOpen(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={confirmReject}>Reject</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AppLayout>
   );
 }

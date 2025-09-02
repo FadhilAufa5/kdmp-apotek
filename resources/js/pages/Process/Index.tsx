@@ -5,7 +5,7 @@ import { Search, Filter, Eye, Truck, X } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { router } from "@inertiajs/react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 const breadcrumbs = [
   { title: "Dashboard", href: "/dashboard" },
@@ -25,17 +25,38 @@ const statusStyle: Record<string, string> = {
   Process: "bg-yellow-100 text-yellow-700",
   "On Delivery": "bg-blue-100 text-blue-700",
   Received: "bg-green-100 text-green-700",
+  Rejected: "bg-red-100 text-red-700",
 };
 
 export default function ProcessOrders() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
+  const [pos, setPos] = useState(mockPOs);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedPO, setSelectedPO] = useState<string | null>(null);
 
-  const filteredPOs = mockPOs.filter((po) => {
+  const filteredPOs = pos.filter((po) => {
     const matchSearch = po.id.toLowerCase().includes(search.toLowerCase());
     const matchStatus = statusFilter === "ALL" || po.status === statusFilter;
     return matchSearch && matchStatus;
   });
+
+  const handleReject = (poId: string) => {
+    setSelectedPO(poId);
+    setModalOpen(true);
+  };
+
+  const confirmReject = () => {
+    if (selectedPO) {
+      setPos((prev) =>
+        prev.map((po) =>
+          po.id === selectedPO ? { ...po, status: "Rejected" } : po
+        )
+      );
+      setSelectedPO(null);
+      setModalOpen(false);
+    }
+  };
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -69,6 +90,7 @@ export default function ProcessOrders() {
                 <SelectItem value="Process">Process</SelectItem>
                 <SelectItem value="On Delivery">On Delivery</SelectItem>
                 <SelectItem value="Received">Received</SelectItem>
+                <SelectItem value="Rejected">Rejected</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -104,19 +126,19 @@ export default function ProcessOrders() {
                     </span>
                   </td>
                   <td className="p-3 flex gap-2">
-                      <Link href={route("process.delivery", po.id)}>
-                    <Button variant="ghost" size="icon">
+                    <Link href={route("process.delivery", po.id)}>
+                      <Button variant="ghost" size="icon">
                         <Eye className="w-4 h-4 text-blue-600" />
-                    </Button>
+                      </Button>
                     </Link>
 
                     <Link href={route("process.order", po.id)}>
-                    <Button variant="ghost" size="icon">
-                      <Truck className="w-4 h-4 text-green-600" />
-                    </Button>
+                      <Button variant="ghost" size="icon">
+                        <Truck className="w-4 h-4 text-green-600" />
+                      </Button>
                     </Link>
 
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" onClick={() => handleReject(po.id)}>
                       <X className="w-4 h-4 text-red-600" />
                     </Button>
                   </td>
@@ -126,6 +148,20 @@ export default function ProcessOrders() {
           </table>
         </Card>
       </div>
+
+      {/* Reject Confirmation Modal */}
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reject Purchase Order</DialogTitle>
+          </DialogHeader>
+          <p>Are you sure you want to reject Order {selectedPO}?</p>
+          <DialogFooter className="flex justify-end gap-2 mt-4">
+            <Button variant="outline" onClick={() => setModalOpen(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={confirmReject}>Reject</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AppLayout>
   );
 }

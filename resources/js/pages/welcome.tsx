@@ -27,7 +27,7 @@ export default function Welcome() {
               className="h-10 w-auto drop-shadow"
             />
             <span className="text-lg font-bold text-gray-800 dark:text-white">
-              KFA Portal
+              KFApotek
             </span>
           </div>
           <nav className="flex items-center gap-4 text-sm">

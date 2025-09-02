@@ -5,6 +5,7 @@ import { Head, usePage } from "@inertiajs/react";
 import { Clock, CheckCircle, XCircle, ListChecks, Bell } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 const breadcrumbs: BreadcrumbItem[] = [
   { title: "Dashboard", href: "/admin/dashboard/busdev" },
@@ -12,16 +13,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function DashboardOrders() {
   const { auth }: any = usePage().props;
-  const adminName = auth?.user?.name || "Admin"; // fallback kalau tidak ada nama
+  const adminName = auth?.user?.name || "Admin";
   const [showNotifications, setShowNotifications] = useState(false);
 
-  // Dummy data untuk orders
-  const stats = {
-    total: 6,
-    pending: 2,
-    accepted: 2,
-    rejected: 1,
-  };
+  const stats = { total: 5, pending: 2, accepted: 2, rejected: 1 };
 
   const recentOrders = [
     { id: "PO 001", koperasi: "Koperasi Desa Purwokerto", price: 199800, status: "Pending" },
@@ -43,17 +38,22 @@ export default function DashboardOrders() {
     Rejected: "bg-red-100 text-red-700",
   };
 
+  const statsIcons = [
+    <ListChecks className="text-blue-600 mb-2" size={32} />,
+    <Clock className="text-yellow-600 mb-2" size={32} />,
+    <CheckCircle className="text-green-600 mb-2" size={32} />,
+    <XCircle className="text-red-600 mb-2" size={32} />,
+  ];
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Dashboard Orders" />
       <div className="flex flex-1 flex-col gap-6 p-4 md:p-6 overflow-x-auto">
-        
-        {/* Header + Notifikasi Button */}
+
+        {/* Header + Notifications */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold">
-              Selamat Datang, {adminName}! 👋
-            </h1>
+            <h1 className="text-2xl font-bold">Selamat Datang, {adminName}! 👋</h1>
             <p className="text-gray-600">
               Semoga harimu menyenangkan! Berikut ringkasan pesanan koperasi hari ini.
             </p>
@@ -79,7 +79,7 @@ export default function DashboardOrders() {
                   {notifications.map((notif, idx) => (
                     <div
                       key={idx}
-                      className="flex items-start gap-3 p-3 border rounded-lg hover:bg-gray-50"
+                      className="flex items-start gap-3 p-3 border rounded-lg hover:bg-gray-50 transition"
                     >
                       <Clock className="text-gray-500" size={18} />
                       <div>
@@ -96,77 +96,64 @@ export default function DashboardOrders() {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="p-4 flex flex-col items-center justify-center">
-              <ListChecks className="text-blue-600 mb-2" size={32} />
-              <h3 className="text-lg font-bold">{stats.total}</h3>
-              <p className="text-gray-500 text-sm">Total Orders Today</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-4 flex flex-col items-center justify-center">
-              <Clock className="text-yellow-600 mb-2" size={32} />
-              <h3 className="text-lg font-bold">{stats.pending}</h3>
-              <p className="text-gray-500 text-sm">Pending Orders</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-4 flex flex-col items-center justify-center">
-              <CheckCircle className="text-green-600 mb-2" size={32} />
-              <h3 className="text-lg font-bold">{stats.accepted}</h3>
-              <p className="text-gray-500 text-sm">Accepted Orders</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-4 flex flex-col items-center justify-center">
-              <XCircle className="text-red-600 mb-2" size={32} />
-              <h3 className="text-lg font-bold">{stats.rejected}</h3>
-              <p className="text-gray-500 text-sm">Rejected Orders</p>
-            </CardContent>
-          </Card>
+          {Object.keys(stats).map((key, idx) => (
+            <motion.div
+              key={key}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: idx * 0.1, type: "spring", stiffness: 120 }}
+              whileHover={{ scale: 1.05, boxShadow: "0 10px 20px rgba(0,0,0,0.15)" }}
+            >
+              <Card className="cursor-pointer">
+                <CardContent className="p-4 flex flex-col items-center justify-center">
+                  {statsIcons[idx]}
+                  <h3 className="text-lg font-bold">{Object.values(stats)[idx]}</h3>
+                  <p className="text-gray-500 text-sm capitalize">{key} Orders</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
         </div>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Recent Orders */}
-          <Card className="lg:col-span-2">
-            <CardContent className="p-4">
-              <h3 className="text-lg font-bold mb-4">Recent Purchase Orders</h3>
-              <div className="flex flex-col gap-3">
-                {recentOrders.map((order) => (
-                  <div
-                    key={order.id}
-                    className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-full bg-blue-100 text-blue-600">
-                        <ListChecks size={20} />
-                      </div>
-                      <div>
-                        <p className="font-semibold">{order.id}</p>
-                        <p className="text-sm text-gray-500">{order.koperasi}</p>
-                      </div>
+        {/* Recent Orders */}
+        <Card className="lg:col-span-2">
+          <CardContent className="p-4">
+            <h3 className="text-lg font-bold mb-4">Recent Purchase Orders</h3>
+            <div className="flex flex-col gap-3">
+              {recentOrders.map((order, idx) => (
+                <motion.div
+                  key={order.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="flex items-center justify-between p-3 border rounded-lg cursor-pointer hover:scale-105 hover:shadow-lg hover:bg-gray-50 transition"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-full bg-blue-100 text-blue-600">
+                      <ListChecks size={20} />
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className="font-semibold">
-                        Rp {order.price.toLocaleString("id-ID")},00
-                      </span>
-                      <span
-                        className={`px-3 py-1 text-xs font-medium rounded-full ${statusColors[order.status]}`}
-                      >
-                        {order.status}
-                      </span>
+                    <div>
+                      <p className="font-semibold">{order.id}</p>
+                      <p className="text-sm text-gray-500">{order.koperasi}</p>
                     </div>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+                  <div className="flex items-center gap-3">
+                    <span className="font-semibold">
+                      Rp {order.price.toLocaleString("id-ID")},00
+                    </span>
+                    <span
+                      className={`px-3 py-1 text-xs font-medium rounded-full ${statusColors[order.status]}`}
+                    >
+                      {order.status}
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </AppLayout>
   );
 }
+ 

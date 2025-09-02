@@ -88,8 +88,8 @@ export default function MappingUsers() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">Mapping</h1>
-            <p className="text-gray-600">Mapping Cooperation</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Mapping</h1>
+            <p className="text-gray-600 dark:text-gray-400">Mapping Cooperation</p>
           </div>
           <div className="flex gap-2 flex-wrap">
             <Button variant="outline" className="flex items-center gap-2">
@@ -135,37 +135,39 @@ export default function MappingUsers() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto rounded-lg border bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-lg border bg-white dark:bg-gray-900 dark:border-gray-700 shadow-sm">
           <Table className="min-w-[600px]">
-            <TableHeader className="bg-gray-50">
+            <TableHeader className="bg-gray-50 dark:bg-gray-800">
               <TableRow>
-                <TableHead className="font-semibold text-gray-700">Gmail</TableHead>
-                <TableHead className="font-semibold text-gray-700">Username</TableHead>
-                <TableHead className="font-semibold text-gray-700">Role</TableHead>
-                <TableHead className="font-semibold text-gray-700">Status</TableHead>
-                <TableHead className="text-right font-semibold text-gray-700">Action</TableHead>
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-200">Gmail</TableHead>
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-200">Username</TableHead>
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-200">Role</TableHead>
+                <TableHead className="font-semibold text-gray-700 dark:text-gray-200">Status</TableHead>
+                <TableHead className="text-right font-semibold text-gray-700 dark:text-gray-200">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredUsers.map((user, i) => (
                 <TableRow
                   key={i}
-                  className="hover:bg-gray-50 transition-colors"
+                  className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 >
-                  <TableCell className="font-medium text-gray-900 break-words">{user.email}</TableCell>
-                  <TableCell className="break-words">{user.username}</TableCell>
+                  <TableCell className="font-medium text-gray-900 dark:text-gray-100 break-words">
+                    {user.email}
+                  </TableCell>
+                  <TableCell className="break-words dark:text-gray-300">{user.username}</TableCell>
                   <TableCell>
-                    <span className="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700">
+                    <span className="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-200">
                       {user.role}
                     </span>
                   </TableCell>
                   <TableCell>
                     {user.status === "Mapped" ? (
-                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200">
                         Mapped
                       </span>
                     ) : (
-                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-700">
+                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200">
                         Not Mapped
                       </span>
                     )}
@@ -175,7 +177,7 @@ export default function MappingUsers() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-green-600 hover:text-green-800"
+                        className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300"
                         onClick={() => handleDetail(user)}
                       >
                         <Info className="w-4 h-4" />
@@ -185,7 +187,7 @@ export default function MappingUsers() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-blue-600 hover:text-blue-800"
+                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                         onClick={() => handleMapping(user)}
                       >
                         <Link2 className="w-4 h-4" />
@@ -195,7 +197,7 @@ export default function MappingUsers() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-red-600 hover:text-red-800"
+                      className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
                       onClick={() => handleDelete(i)}
                     >
                       <Trash2 className="w-4 h-4" />
@@ -207,7 +209,7 @@ export default function MappingUsers() {
             </TableBody>
           </Table>
           {/* Footer */}
-          <div className="px-4 py-3 text-sm text-gray-500 border-t bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-2">
+          <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 border-t bg-gray-50 dark:bg-gray-800 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-2">
             <span>
               Showing 1 to {filteredUsers.length} of {users.length} results
             </span>
@@ -224,42 +226,42 @@ export default function MappingUsers() {
 
         {/* Detail / Mapping Modal */}
         {showDetail && selectedUser && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-lg mx-2 animate-fadeIn">
-              <h2 className="text-lg font-bold mb-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-6 w-full max-w-lg mx-2 animate-fadeIn">
+              <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">
                 Mapping {selectedUser.email}
               </h2>
               <div className="space-y-3">
                 <div>
-                  <label className="block text-sm font-medium">Nama Koperasi</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Koperasi</label>
                   <Input defaultValue="Koperasi Bangka Belitung Desa Mamuju" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium">Lokasi Koperasi</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Lokasi Koperasi</label>
                   <Input defaultValue="Jl. Simpang Payung No.3" />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm font-medium">Kelurahan</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Kelurahan</label>
                     <Input defaultValue="Air Bara" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium">Kecamatan</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Kecamatan</label>
                     <Input defaultValue="Air Gegas" />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm font-medium">Provinsi</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Provinsi</label>
                     <Input defaultValue="Bangka Selatan" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium">Kode Pos</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Kode Pos</label>
                     <Input defaultValue="33782" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium">Cabang Kimia Farma</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Cabang Kimia Farma</label>
                   <Input defaultValue="Kimia Farma Sungailiat" />
                 </div>
               </div>
@@ -273,7 +275,7 @@ export default function MappingUsers() {
                 <Button
                   onClick={() => {
                     setShowDetail(false);
-                    setShowConfirm(true); // buka confirm modal
+                    setShowConfirm(true);
                   }}
                 >
                   Simpan
@@ -285,10 +287,10 @@ export default function MappingUsers() {
 
         {/* Confirm Save Modal */}
         {showConfirm && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-sm mx-2 animate-fadeIn">
-              <h2 className="text-lg font-bold mb-3">Konfirmasi</h2>
-              <p className="text-sm text-gray-600">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-6 w-full max-w-sm mx-2 animate-fadeIn">
+              <h2 className="text-lg font-bold mb-3 text-gray-900 dark:text-gray-100">Konfirmasi</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 Apakah Anda yakin ingin menyimpan perubahan mapping ini? Data lama akan diganti.
               </p>
               <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
@@ -297,7 +299,6 @@ export default function MappingUsers() {
                 </Button>
                 <Button
                   onClick={() => {
-                    // update user jadi mapped
                     const updated = users.map((u) =>
                       u.email === selectedUser.email ? { ...u, status: "Mapped" } : u
                     );
