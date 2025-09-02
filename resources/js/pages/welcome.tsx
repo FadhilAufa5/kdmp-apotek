@@ -1,110 +1,102 @@
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Package, ClipboardList } from "lucide-react";
+import { LogIn } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Welcome() {
-    const { auth } = usePage<SharedData>().props;
+  const { auth } = usePage<SharedData>().props;
 
-    return (
-        <>
-            <Head title="Welcome">
-                <link rel="preconnect" href="https://fonts.bunny.net" />
-                <link
-                    href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600"
-                    rel="stylesheet"
-                />
-            </Head>
+  return (
+    <>
+      <Head title="Welcome">
+        <link rel="preconnect" href="https://fonts.bunny.net" />
+        <link
+          href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600"
+          rel="stylesheet"
+        />
+      </Head>
 
-            <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 text-[#1b1b18] p-6">
-                
-                {/* Navbar */}
-                <header className="absolute top-0 right-0 p-6 w-full max-w-7xl flex justify-end">
-                    <nav className="flex items-center gap-4 text-sm">
-                        {auth.user ? (
-                            <Link
-                                href={route('dashboard')}
-                                className="rounded-lg border px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
-                            >
-                                Dashboard
-                            </Link>
-                        ) : (
-                            <>
-                                <Link
-                                    href={route('login')}
-                                    className="rounded-lg px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
-                                >
-                                    Log in
-                                </Link>
-                                <Link
-                                    href={route('register')}
-                                    className="rounded-lg border px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
-                                >
-                                    Register
-                                </Link>
-                            </>
-                        )}
-                    </nav>
-                </header>
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-950 dark:to-black text-[#1b1b18]">
+        
+        {/* Navbar */}
+        <header className="w-full max-w-7xl mx-auto p-6 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <img
+              src="/Logo KFA member of BioFarma 300x300-01.png"
+              alt="Logo"
+              className="h-10 w-auto drop-shadow"
+            />
+            <span className="text-lg font-bold text-gray-800 dark:text-white">
+              KFA Portal
+            </span>
+          </div>
+          <nav className="flex items-center gap-4 text-sm">
+            {auth.user ? (
+              <Link
+                href={route('dashboard')}
+                className="rounded-lg border px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <Link
+                href={route('login')}
+                className="inline-flex items-center gap-1 rounded-lg border px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800"
+              >
+                <LogIn className="w-4 h-4" /> Log in
+              </Link>
+            )}
+          </nav>
+        </header>
 
-                {/* Logo dan Greeting */}
-                <div className="text-center mt-20 mb-10">
-                    <img
-                        src="/Logo KFA member of BioFarma 300x300-01.png"
-                        alt="Logo"
-                        className="mx-auto h-24 w-auto mb-4 drop-shadow-md"
-                    />
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                        Selamat Datang, {auth.user?.name || 'Pengguna'} 👋
-                    </h1>
-                    <p className="mt-2 text-gray-600 dark:text-gray-400 text-base">
-                        Silakan pilih modul yang ingin Anda akses di bawah ini
-                    </p>
-                </div>
+        {/* Hero / Greeting Section */}
+        <main className="flex flex-1 flex-col items-center justify-center text-center px-6">
+          <img
+            src="/Logo KFA member of BioFarma 300x300-01.png"
+            alt="Logo"
+            className="mx-auto h-28 w-auto mb-6 drop-shadow-md"
+          />
 
-                {/* Cards Menu */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
-                    {/* Pemesanan Barang */}
-                    <Link
-                        href="pemesanan/medicines"
-                        className="group relative rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all"
-                    >
-                        <div className="flex flex-col items-start gap-4">
-                            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-green-100 text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors">
-                                <ClipboardList className="w-6 h-6" />
-                            </div>
-                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-green-600">
-                                Pemesanan Barang
-                            </h2>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                                Buat dan kelola pesanan barang sesuai kebutuhan operasional.
-                            </p>
-                        </div>
-                    </Link>
+          {/* Animasi Teks Utama */}
+          <motion.h1
+            className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white cursor-pointer"
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            whileHover={{ scale: 1.05, rotate: -1 }}
+          >
+            Selamat Datang {auth.user?.name ? `, ${auth.user.name}` : ''} 👋
+          </motion.h1>
 
-                    {/* Penerimaan Barang */}
-                    <Link
-                        href="/penerimaan"
-                        className="group relative rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all"
-                    >
-                        <div className="flex flex-col items-start gap-4">
-                            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                <Package className="w-6 h-6" />
-                            </div>
-                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600">
-                                Penerimaan Barang
-                            </h2>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                                Kelola dan catat proses penerimaan barang dengan mudah dan cepat.
-                            </p>
-                        </div>
-                    </Link>
-                </div>
+          {/* Teks Deskripsi dengan Efek Gerak */}
+          <motion.p
+            className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 1 }}
+            whileHover={{ color: "#2563eb", scale: 1.02 }}
+          >
+            lorem ipsum dolor amet{" "}
+            <span className="font-semibold text-blue-600">lorem</span> dan{" "}
+            <span className="font-semibold text-green-600">lorem</span>{" "}
+            testetstettgagsjdjkahuh
+          </motion.p>
 
-                {/* Footer */}
-                <footer className="mt-16 text-sm text-gray-500 dark:text-gray-400">
-                    © {new Date().getFullYear()} KFA - All rights reserved
-                </footer>
-            </div>
-        </>
-    );
+          {auth.user && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+            >
+            </motion.div>
+          )}
+        </main>
+
+        {/* Footer */}
+        <footer className="mt-10 mb-6 text-sm text-gray-500 dark:text-gray-400 text-center">
+          © {new Date().getFullYear()} KFA - All rights reserved
+        </footer>
+      </div>
+    </>
+  );
 }
