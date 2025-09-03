@@ -34,6 +34,19 @@ const mockPOs = [
       { name: "Masker Medis", qty: 5, unitPrice: 10000, subtotal: 50000 },
     ],
   },
+  {
+    id: "PO 003",
+    koperasi: "Koperasi Sukarela",
+    pengentri: "Ahmad Fauzi",
+    date: "22-01-2025",
+    qty: 10,
+    price: 195000,
+    status: "Rejected",
+    products: [
+      { name: "Vitamin C 1000mg", qty: 3, unitPrice: 25000, subtotal: 100000 },
+      { name: "Batugin", qty: 5, unitPrice: 10000, subtotal: 95000 },
+    ],
+  },
 ];
 
 const statusColor = {
@@ -137,20 +150,30 @@ export default function PurchaseOrders() {
                     </span>
                   </td>
                   <td className="p-3 flex gap-2">
+                    {/* Tombol Preview selalu ada */}
                     <Link href={route("purchase.show", po.id)}>
                       <Button variant="ghost" size="icon">
                         <Eye className="w-4 h-4 text-blue-600" />
                       </Button>
                     </Link>
 
-                    <Button variant="ghost" size="icon">
-                      <Check className="w-4 h-4 text-green-600" />
-                    </Button>
+                    {po.status === "Pending" && (
+                      <>
+                        <Button variant="ghost" size="icon">
+                          <Check className="w-4 h-4 text-green-600" />
+                        </Button>
 
-                    <Button variant="ghost" size="icon" onClick={() => handleReject(po.id)}>
-                      <X className="w-4 h-4 text-red-600" />
-                    </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleReject(po.id)}
+                        >
+                          <X className="w-4 h-4 text-red-600" />
+                        </Button>
+                      </>
+                    )}
                   </td>
+
                 </tr>
               ))}
             </tbody>

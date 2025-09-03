@@ -34,10 +34,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Dashboard Busdev
     Route::get('dashboard/busdev', [DashboardController::class, 'busdev'])->name('dashboard.busdev');
 
-
     // Pemesanan
     Route::get('purchase', [PurchaseOrderController::class, 'index'])->name('purchase.index');
-    Route::get('purchase/show/{id}', [PurchaseOrderController::class, 'show'])->name('purchase.show');
+    Route::get('purchase/{id}', [PurchaseOrderController::class, 'show'])->name('purchase.show');
 
     // Proses Order
     Route::get('process', [ProcessOrderController::class, 'index'])->name('process.index');

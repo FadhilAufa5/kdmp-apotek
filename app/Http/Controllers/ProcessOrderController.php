@@ -2,24 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia; // tambahkan ini
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 class ProcessOrderController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Process/Index', []);
+        // Halaman daftar Process Orders
+        return Inertia::render('Process/Index');
     }
     
     public function order($id)
     {
-        return Inertia::render('Process/Order', ['id' => $id]);
+       
+        $purchaseOrder = [
+            "id" => $id,
+            "koperasi" => "Koperasi Desa Purwokerto",
+            "date" => "2025-08-18",
+            "pengentri" => "Agus Praya",
+            "qty" => 12,
+            "status" => "Process",
+            "delivery_address" => "Jl. Jenderal Sudirman No. 21 KAV 3, Jati, Banyuwangi",
+            "products" => [
+                [
+                    "name" => "Paracetamol",
+                    "qty" => 2,
+                    "unitPrice" => 15000,
+                    "subtotal" => 30000,
+                ],
+                [
+                    "name" => "Amoxilin",
+                    "qty" => 9,
+                    "unitPrice" => 15000,
+                    "subtotal" => 135000,
+                ],
+            ],
+            "subtotal" => 165000,
+            "ppn" => 18150,
+            "price" => 183150,
+            "hasDeliveryOrder" => false,
+        ];
+
+        return Inertia::render('Process/Order', [
+            "purchaseOrder" => $purchaseOrder,
+        ]);
     }
 
     public function show($id)
     {
-        // Dummy data (sementara hardcode dulu, nanti bisa ambil dari DB)
         $purchaseOrders = [
             "PO 001" => [
                 "koperasi" => "Koperasi Desa Purwokerto",
@@ -97,9 +128,9 @@ class ProcessOrderController extends Controller
             abort(404, "Purchase Order not found");
         }
 
-        return Inertia::render('Process/DeliveryOrder', [ // perbaiki typo: "DeleveryOrder" -> "DeliveryOrder"
+        return Inertia::render('Process/DeliveryOrder', [
             "id" => $id,
-            "po" => $purchaseOrders[$id]
+            "purchaseOrder" => $purchaseOrders[$id], 
         ]);
     }
 }

@@ -200,30 +200,35 @@ export default function DeliveryOrder() {
 
         {/* ✅ Success Popup */}
         <Dialog open={openSuccess} onOpenChange={setOpenSuccess}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-green-600">
-                <CheckCircle2 className="w-6 h-6" />
-                Berhasil Disimpan
-              </DialogTitle>
-            </DialogHeader>
-            <p className="text-gray-600">Delivery Order berhasil disimpan ke sistem.</p>
-            <DialogFooter>
-                <Link href={route("process.order", id)}>
-              <Button onClick={() => setOpenSuccess(false)} className="bg-green-600 text-white">
-                OK
-              </Button>
-              </Link>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+  <DialogContent className="sm:max-w-md">
+    <DialogHeader>
+      <DialogTitle className="flex items-center gap-2 text-green-600">
+        <CheckCircle2 className="w-6 h-6" />
+        Berhasil Disimpan
+      </DialogTitle>
+    </DialogHeader>
 
-        {/* Buttons */}
+    <p className="text-gray-600">
+      Delivery Order berhasil disimpan ke sistem.
+    </p>
+
+    <DialogFooter>
+      <Link href={route("process.order", id)}>
+        <Button className="bg-green-600 text-white">
+          OK
+        </Button>
+      </Link>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+
+
+       
 <div className="flex justify-end gap-3">
 
     <Button variant="outline">Batal</Button>
 
-  {/* Simpan DO pakai handler */}
+ 
   <Button className="bg-green-600 text-white" onClick={handleSaveDO}>
     Simpan DO
   </Button>
