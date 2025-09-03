@@ -22,7 +22,7 @@ import {
 import { useState } from "react";
 
 const breadcrumbs: BreadcrumbItem[] = [
-  { title: "Dashboard", href: "/admin/dashboard/busdev" },
+  { title: "Dashboard", href: "/dashboard" },
   { title: "Mapping", href: "/admin/mapping" },
 ];
 
@@ -224,66 +224,121 @@ export default function MappingUsers() {
           </div>
         </div>
 
-        {/* Detail / Mapping Modal */}
-        {showDetail && selectedUser && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-6 w-full max-w-lg mx-2 animate-fadeIn">
-              <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">
-                Mapping {selectedUser.email}
-              </h2>
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Koperasi</label>
-                  <Input defaultValue="Koperasi Bangka Belitung Desa Mamuju" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Lokasi Koperasi</label>
-                  <Input defaultValue="Jl. Simpang Payung No.3" />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Kelurahan</label>
-                    <Input defaultValue="Air Bara" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Kecamatan</label>
-                    <Input defaultValue="Air Gegas" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Provinsi</label>
-                    <Input defaultValue="Bangka Selatan" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Kode Pos</label>
-                    <Input defaultValue="33782" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Cabang Kimia Farma</label>
-                  <Input defaultValue="Kimia Farma Sungailiat" />
-                </div>
-              </div>
-              <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
-                <Button
-                  variant="destructive"
-                  onClick={() => setShowDetail(false)}
-                >
-                  Batal
-                </Button>
-                <Button
-                  onClick={() => {
-                    setShowDetail(false);
-                    setShowConfirm(true);
-                  }}
-                >
-                  Simpan
-                </Button>
-              </div>
-            </div>
+      {/* Detail / Mapping Modal */}
+{showDetail && selectedUser && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-6 w-full max-w-lg mx-2 animate-fadeIn">
+      <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">
+        {selectedUser.status === "Mapped"
+          ? `Detail ${selectedUser.email}`
+          : `Mapping ${selectedUser.email}`}
+      </h2>
+
+      <div className="space-y-3">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Nama Koperasi
+          </label>
+          <Input
+            defaultValue="Koperasi Bangka Belitung Desa Mamuju"
+            disabled={selectedUser.status === "Mapped"}
+            className={selectedUser.status === "Mapped" ? "opacity-60" : ""}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Lokasi Koperasi
+          </label>
+          <Input
+            defaultValue="Jl. Simpang Payung No.3"
+            disabled={selectedUser.status === "Mapped"}
+            className={selectedUser.status === "Mapped" ? "opacity-60" : ""}
+          />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Kelurahan
+            </label>
+            <Input
+              defaultValue="Air Bara"
+              disabled={selectedUser.status === "Mapped"}
+              className={selectedUser.status === "Mapped" ? "opacity-60" : ""}
+            />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Kecamatan
+            </label>
+            <Input
+              defaultValue="Air Gegas"
+              disabled={selectedUser.status === "Mapped"}
+              className={selectedUser.status === "Mapped" ? "opacity-60" : ""}
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Provinsi
+            </label>
+            <Input
+              defaultValue="Bangka Selatan"
+              disabled={selectedUser.status === "Mapped"}
+              className={selectedUser.status === "Mapped" ? "opacity-60" : ""}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Kode Pos
+            </label>
+            <Input
+              defaultValue="33782"
+              disabled={selectedUser.status === "Mapped"}
+              className={selectedUser.status === "Mapped" ? "opacity-60" : ""}
+            />
+          </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Cabang Kimia Farma
+          </label>
+          {selectedUser.status === "Mapped" ? (
+            <Input
+              defaultValue="Kimia Farma Sungailiat"
+              disabled
+              className="opacity-60"
+            />
+          ) : (
+            <select className="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 focus:ring focus:ring-indigo-500">
+              <option>Kimia Farma Sungailiat</option>
+              <option>Kimia Farma Pangkalpinang</option>
+              <option>Kimia Farma Toboali</option>
+              <option>Kimia Farma Belinyu</option>
+            </select>
+          )}
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
+        <Button variant="destructive" onClick={() => setShowDetail(false)}>
+          {selectedUser.status === "Mapped" ? "Tutup" : "Batal"}
+        </Button>
+        {selectedUser.status === "Not Mapped" && (
+          <Button
+            onClick={() => {
+              setShowDetail(false);
+              setShowConfirm(true);
+            }}
+          >
+            Simpan
+          </Button>
         )}
+      </div>
+    </div>
+  </div>
+)}
+
 
         {/* Confirm Save Modal */}
         {showConfirm && (

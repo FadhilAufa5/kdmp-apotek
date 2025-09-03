@@ -16,7 +16,7 @@ import {
 import { format } from "date-fns";
 
 const breadcrumbs: BreadcrumbItem[] = [
-  { title: "Dashboard", href: "/admin/dashboard/busdev" },
+  { title: "Dashboard", href: "/dashboard" },
   { title: "Account Management", href: "/admin/mapping" },
 ];
 

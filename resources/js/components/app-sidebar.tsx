@@ -12,7 +12,15 @@ import {
 } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { LayoutGrid, ShoppingCart, Box, Map, Users } from 'lucide-react';
+import {
+  LayoutGrid,
+  ShoppingCart,
+  Box,
+  Map,
+  Users,
+  Shield,
+  UserPlus,
+} from 'lucide-react';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
@@ -39,7 +47,7 @@ export function AppSidebar() {
       title: 'Dashboard',
       items: [{ title: 'Dashboard', href: '/dashboard/busdev', icon: LayoutGrid }],
     },
-   {
+    {
       title: 'Menus',
       items: [
         { title: 'Mapping', href: '/mapping', icon: Map },
@@ -48,8 +56,41 @@ export function AppSidebar() {
     },
   ];
 
+  // Menu khusus Super Admin
+  const superSections = [
+    {
+      title: 'Dashboard',
+      items: [{ title: 'Dashboard', href: '/dashboard/super', icon: LayoutGrid }],
+    },
+    {
+      title: 'Apotek Menus',
+      items: [
+        { title: 'Purchase Orders', href: '/purchase', icon: ShoppingCart },
+        { title: 'Process Orders', href: '/process', icon: Box },
+      ],
+    },
+    {
+      title: 'Busdev Menus',
+      items: [
+        { title: 'Mapping', href: '/mapping', icon: Map },
+        { title: 'Account Manage', href: '/account', icon: Users },
+      ],
+    },
+    {
+      title: 'Admin Tools',
+      items: [
+        { title: 'User Management', href: '/users', icon: UserPlus },
+      ],
+    },
+  ];
+
   // Pilih sections sesuai role user
-  const sections = auth.user.role === 'apotek' ? apotekSections : busdevSections;
+  const sections =
+    auth.user.role === 'apotek'
+      ? apotekSections
+      : auth.user.role === 'busdev'
+      ? busdevSections
+      : superSections; // default ke super admin
 
   const footerNavItems: NavItem[] = [];
 

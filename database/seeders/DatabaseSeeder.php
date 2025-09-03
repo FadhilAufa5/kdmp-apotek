@@ -13,10 +13,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seeder user dummy
+        // Seeder user dummy (random 10)
         User::factory(10)->create();
 
-        // Seeder user test
+        // Seeder user test (biasa)
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -36,6 +36,14 @@ class DatabaseSeeder extends Seeder
             'email' => 'busdev@example.com',
             'password' => Hash::make('password'),
             'role' => 'busdev',
+        ]);
+
+        // Seeder user super admin
+        User::create([
+            'name' => 'Super Admin',
+            'email' => 'super@admin.com',
+            'password' => Hash::make('password'),
+            'role' => 'super',
         ]);
     }
 }
