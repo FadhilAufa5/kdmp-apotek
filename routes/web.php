@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\PemesananController;
-use App\Http\Controllers\PenerimaanController;
 use App\Http\Controllers\ProcessOrderController;
 use App\Http\Controllers\PurchaseOrderController;
 use Illuminate\Support\Facades\Route;
@@ -44,7 +42,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Pemesanan
     Route::get('purchase', [PurchaseOrderController::class, 'index'])->name('purchase.index');
-    Route::get('purchase/{id}', [PurchaseOrderController::class, 'show'])->name('purchase.show');
+   Route::get('purchase/{id_transaksi}', [PurchaseOrderController::class, 'show'])->name('purchase.show');
+
 
     // Proses Order
     Route::get('process', [ProcessOrderController::class, 'index'])->name('process.index');

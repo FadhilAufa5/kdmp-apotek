@@ -22,10 +22,10 @@ const mockPOs = [
 ];
 
 const statusStyle: Record<string, string> = {
-  Process: "bg-yellow-100 text-yellow-700",
-  "On Delivery": "bg-blue-100 text-blue-700",
-  Received: "bg-green-100 text-green-700",
-  Rejected: "bg-red-100 text-red-700",
+  Process: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300",
+  "On Delivery": "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300",
+  Received: "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300",
+  Rejected: "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300",
 };
 
 export default function ProcessOrders() {
@@ -63,26 +63,26 @@ export default function ProcessOrders() {
       <Head title="Process Orders" />
 
       <div className="p-6 space-y-6">
-        <h1 className="text-2xl font-bold">Process Orders</h1>
-        <p className="text-gray-500">Manage Delivery from Purchase Orders</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Process Orders</h1>
+        <p className="text-gray-500 dark:text-gray-400">Manage Delivery from Purchase Orders</p>
 
         {/* Search & Filter */}
         <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
           <div className="relative w-full sm:w-1/2">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
             <input
               type="text"
               placeholder="Search by PO ID..."
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
 
           <div className="flex items-center gap-2">
-            <Filter className="w-5 h-5 text-gray-500" />
+            <Filter className="w-5 h-5 text-gray-500 dark:text-gray-400" />
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[160px]">
+              <SelectTrigger className="w-[160px] dark:bg-gray-800 dark:border-gray-700">
                 <SelectValue placeholder="All Status" />
               </SelectTrigger>
               <SelectContent>
@@ -97,9 +97,9 @@ export default function ProcessOrders() {
         </div>
 
         {/* Table */}
-        <Card className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead className="bg-gray-100 text-gray-600 text-sm">
+        <Card className="overflow-x-auto dark:bg-gray-900 dark:border-gray-700">
+          <table className="w-full border-collapse text-gray-900 dark:text-gray-100">
+            <thead className="bg-gray-100 text-gray-600 text-sm dark:bg-gray-800 dark:text-gray-300">
               <tr>
                 <th className="p-3 text-left">PO ID</th>
                 <th className="p-3 text-left">Nama Koperasi</th>
@@ -110,9 +110,9 @@ export default function ProcessOrders() {
                 <th className="p-3 text-left">Actions</th>
               </tr>
             </thead>
-            <tbody className="text-sm divide-y">
+            <tbody className="text-sm divide-y divide-gray-200 dark:divide-gray-700">
               {filteredPOs.map((po) => (
-                <tr key={po.id} className="hover:bg-gray-50">
+                <tr key={po.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
                   <td className="p-3 font-medium">{po.id}</td>
                   <td className="p-3">{po.koperasi}</td>
                   <td className="p-3">{po.date}</td>
@@ -120,7 +120,7 @@ export default function ProcessOrders() {
                   <td className="p-3">Rp{po.price.toLocaleString()}</td>
                   <td className="p-3">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${statusStyle[po.status] || "bg-gray-100 text-gray-700"}`}
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${statusStyle[po.status] || "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"}`}
                     >
                       {po.status}
                     </span>
@@ -128,18 +128,18 @@ export default function ProcessOrders() {
                   <td className="p-3 flex gap-2">
                     <Link href={route("process.delivery", po.id)}>
                       <Button variant="ghost" size="icon">
-                        <Eye className="w-4 h-4 text-blue-600" />
+                        <Eye className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                       </Button>
                     </Link>
 
                     <Link href={route("process.order", po.id)}>
                       <Button variant="ghost" size="icon">
-                        <Truck className="w-4 h-4 text-green-600" />
+                        <Truck className="w-4 h-4 text-green-600 dark:text-green-400" />
                       </Button>
                     </Link>
 
                     <Button variant="ghost" size="icon" onClick={() => handleReject(po.id)}>
-                      <X className="w-4 h-4 text-red-600" />
+                      <X className="w-4 h-4 text-red-600 dark:text-red-400" />
                     </Button>
                   </td>
                 </tr>
@@ -151,7 +151,7 @@ export default function ProcessOrders() {
 
       {/* Reject Confirmation Modal */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent>
+        <DialogContent className="dark:bg-gray-900 dark:text-gray-100">
           <DialogHeader>
             <DialogTitle>Reject Purchase Order</DialogTitle>
           </DialogHeader>

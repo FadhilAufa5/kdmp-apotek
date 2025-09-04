@@ -6,24 +6,22 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 export default function PurchaseOrderDetail({ purchaseOrder }: any) {
-  // state status & flag DO
   const [status, setStatus] = useState(purchaseOrder.status || "Process");
   const [hasDO, setHasDO] = useState(purchaseOrder.hasDeliveryOrder || false);
 
   const handleCreateDO = () => {
-    // sementara hanya update UI, belum ke backend
     setHasDO(true);
     setStatus("On Delivery");
   };
 
   const statusClass =
     status === "On Delivery"
-      ? "bg-blue-50 text-blue-600"
+      ? "bg-blue-50 text-blue-600 dark:bg-blue-900 dark:text-blue-300"
       : status === "Received"
-      ? "bg-green-50 text-green-600"
+      ? "bg-green-50 text-green-600 dark:bg-green-900 dark:text-green-300"
       : status === "Rejected"
-      ? "bg-red-50 text-red-600"
-      : "bg-yellow-50 text-yellow-600";
+      ? "bg-red-50 text-red-600 dark:bg-red-900 dark:text-red-300"
+      : "bg-yellow-50 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-300";
 
   return (
     <AppLayout
@@ -35,20 +33,16 @@ export default function PurchaseOrderDetail({ purchaseOrder }: any) {
     >
       <Head title={`Purchase Order ${purchaseOrder.id}`} />
 
-      <div className="p-6 space-y-6">
+      <div className="p-6 space-y-6 text-gray-900 dark:text-gray-100">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold">
-              Purchase Orders {purchaseOrder.id}
-            </h1>
-            <p className="text-gray-500 text-sm">
+            <h1 className="text-2xl font-bold">{`Purchase Orders ${purchaseOrder.id}`}</h1>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
               Detail View of Selected Purchase Orders
             </p>
           </div>
-          <div
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg shadow-sm ${statusClass}`}
-          >
+          <div className={`flex items-center gap-2 px-4 py-2 rounded-lg shadow-sm ${statusClass}`}>
             <CheckCircle2 className="w-5 h-5" />
             <span className="font-semibold">{status.toUpperCase()}</span>
           </div>
@@ -59,36 +53,31 @@ export default function PurchaseOrderDetail({ purchaseOrder }: any) {
           {/* Left Section */}
           <div className="lg:col-span-2 space-y-6">
             {/* Order Info */}
-            <Card className="p-4">
+            <Card className="p-4 dark:bg-gray-800 dark:border-gray-700">
               <h2 className="font-semibold mb-3">Order Information</h2>
               <div className="grid sm:grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p className="text-gray-500">Purchase Order ID</p>
-                  <p className="font-medium">{purchaseOrder.id}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500">Nama Koperasi</p>
-                  <p className="font-medium">{purchaseOrder.koperasi}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500">Tanggal Order</p>
-                  <p className="font-medium">{purchaseOrder.date}</p>
-                </div>
-                <div>
-                  <p className="text-gray-500">Nama Pengentri</p>
-                  <p className="font-medium">{purchaseOrder.pengentri}</p>
-                </div>
+                {[
+                  { label: "Purchase Order ID", value: purchaseOrder.id },
+                  { label: "Nama Koperasi", value: purchaseOrder.koperasi },
+                  { label: "Tanggal Order", value: purchaseOrder.date },
+                  { label: "Nama Pengentri", value: purchaseOrder.pengentri },
+                ].map((info, idx) => (
+                  <div key={idx}>
+                    <p className="text-gray-500 dark:text-gray-400">{info.label}</p>
+                    <p className="font-medium">{info.value}</p>
+                  </div>
+                ))}
               </div>
             </Card>
 
             {/* Products */}
-            <Card className="p-4">
+            <Card className="p-4 dark:bg-gray-800 dark:border-gray-700">
               <h2 className="font-semibold mb-3">
                 Products ({purchaseOrder.products.length} Items)
               </h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm border-collapse">
-                  <thead className="bg-gray-50 text-gray-600">
+                  <thead className="bg-gray-50 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
                     <tr>
                       <th className="p-2 text-left">Product Name</th>
                       <th className="p-2 text-center">Quantity</th>
@@ -96,17 +85,13 @@ export default function PurchaseOrderDetail({ purchaseOrder }: any) {
                       <th className="p-2 text-right">Sub Total</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y">
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
                     {purchaseOrder.products.map((p: any, i: number) => (
-                      <tr key={i}>
+                      <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                         <td className="p-2">{p.name}</td>
                         <td className="p-2 text-center">{p.qty}</td>
-                        <td className="p-2 text-right">
-                          Rp {p.unitPrice.toLocaleString("id-ID")}
-                        </td>
-                        <td className="p-2 text-right">
-                          Rp {p.subtotal.toLocaleString("id-ID")}
-                        </td>
+                        <td className="p-2 text-right">Rp {p.unitPrice.toLocaleString("id-ID")}</td>
+                        <td className="p-2 text-right">Rp {p.subtotal.toLocaleString("id-ID")}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -114,8 +99,7 @@ export default function PurchaseOrderDetail({ purchaseOrder }: any) {
               </div>
               <div className="flex justify-end mt-3 text-sm">
                 <div className="font-semibold">
-                  Sub Total Value: Rp{" "}
-                  {purchaseOrder.subtotal.toLocaleString("id-ID")}
+                  Sub Total Value: Rp {purchaseOrder.subtotal.toLocaleString("id-ID")}
                 </div>
               </div>
             </Card>
@@ -124,58 +108,48 @@ export default function PurchaseOrderDetail({ purchaseOrder }: any) {
           {/* Right Section */}
           <div className="space-y-6">
             {/* Delivery Info */}
-            <Card className="p-4 space-y-3">
+            <Card className="p-4 space-y-3 dark:bg-gray-800 dark:border-gray-700">
               <h2 className="font-semibold">Delivery Information</h2>
-              <div className="text-sm text-gray-700">
+              <div className="text-sm text-gray-700 dark:text-gray-300">
                 <p className="font-medium">Tujuan Delivery</p>
-                <p className="text-gray-600">{purchaseOrder.delivery_address}</p>
+                <p className="text-gray-600 dark:text-gray-400">{purchaseOrder.delivery_address}</p>
               </div>
               <div className="text-sm">
                 <p className="font-medium">Estimated Delivery</p>
-                <p className="text-gray-600">1–2 Business Days</p>
+                <p className="text-gray-600 dark:text-gray-400">1–2 Business Days</p>
               </div>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <p className="text-gray-500">Delivery Order Create Date</p>
-                  <p className="font-medium">
-                    {hasDO ? purchaseOrder.date : "-"}
-                  </p>
+                  <p className="text-gray-500 dark:text-gray-400">Delivery Order Create Date</p>
+                  <p className="font-medium">{hasDO ? purchaseOrder.date : "-"}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500">Received Date</p>
+                  <p className="text-gray-500 dark:text-gray-400">Received Date</p>
                   <p className="font-medium">-</p>
                 </div>
               </div>
             </Card>
 
             {/* Order Summary */}
-            <Card className="p-4 space-y-2">
+            <Card className="p-4 space-y-2 dark:bg-gray-800 dark:border-gray-700">
               <h2 className="font-semibold">Order Summary</h2>
-              <div className="flex justify-between text-sm">
-                <span>Total Products</span>
-                <span>{purchaseOrder.products.length}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Total Quantity</span>
-                <span>{purchaseOrder.qty}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Sub Total Order</span>
-                <span>
-                  Rp {purchaseOrder.subtotal.toLocaleString("id-ID")}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>PPN (11%)</span>
-                <span>Rp {purchaseOrder.ppn.toLocaleString("id-ID")}</span>
-              </div>
-              <hr className="my-2" />
+              {[
+                { label: "Total Products", value: purchaseOrder.products.length },
+                { label: "Total Quantity", value: purchaseOrder.qty },
+                { label: "Sub Total Order", value: `Rp ${purchaseOrder.subtotal.toLocaleString("id-ID")}` },
+                { label: "PPN (11%)", value: `Rp ${purchaseOrder.ppn.toLocaleString("id-ID")}` },
+              ].map((item, idx) => (
+                <div key={idx} className="flex justify-between text-sm">
+                  <span>{item.label}</span>
+                  <span>{item.value}</span>
+                </div>
+              ))}
+              <hr className="my-2 border-gray-200 dark:border-gray-600" />
               <div className="flex justify-between font-bold text-lg">
                 <span>Total Value</span>
                 <span>Rp {purchaseOrder.price.toLocaleString("id-ID")}</span>
               </div>
 
-              {/* Tombol hanya muncul kalau masih Process */}
               {status === "Process" && !hasDO && (
                 <Button
                   onClick={handleCreateDO}

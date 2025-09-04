@@ -80,6 +80,27 @@ export default function MappingUsers() {
     setShowDetail(true);
   };
 
+    // === EXPORT TO CSV ===
+  const exportToCSV = () => {
+    const header = ["Email", "Username", "Role", "Status"];
+    const rows = users.map((u) => [u.email, u.username, u.role, u.status]);
+
+    const csvContent =
+      [header, ...rows]
+        .map((e) => e.map((cell) => `"${cell}"`).join(","))
+        .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "mapping_users.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Mapping Users" />
@@ -92,7 +113,11 @@ export default function MappingUsers() {
             <p className="text-gray-600 dark:text-gray-400">Mapping Cooperation</p>
           </div>
           <div className="flex gap-2 flex-wrap">
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              className="flex items-center gap-2"
+              onClick={exportToCSV}
+            >
               <FileDown className="w-4 h-4" /> Export
             </Button>
           </div>

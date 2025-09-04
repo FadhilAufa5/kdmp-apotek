@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { route } from 'ziggy-js';
+import { route } from "ziggy-js";
 import axios from "axios";
 
 export default function UsersPage({ users }: any) {
@@ -44,7 +44,7 @@ export default function UsersPage({ users }: any) {
       onSuccess: () => {
         reset();
         setOpen(false);
-        location.reload(); // reload supaya tabel update
+        location.reload();
       },
     });
   };
@@ -61,42 +61,44 @@ export default function UsersPage({ users }: any) {
       value: users.length,
       desc: "Active users in the system",
       icon: <Users className="text-blue-600" size={28} />,
-      bg: "bg-blue-100",
+      bg: "bg-blue-100 dark:bg-blue-900/40",
     },
     {
       title: "Total Admins",
       value: users.filter((u: any) => u.role === "super").length,
       desc: "Active admin users in the system",
       icon: <Shield className="text-green-600" size={28} />,
-      bg: "bg-green-100",
+      bg: "bg-green-100 dark:bg-green-900/40",
     },
     {
       title: "Total Dormant",
       value: 0,
       desc: "Inactive users in the system",
       icon: <UserX className="text-red-600" size={28} />,
-      bg: "bg-red-100",
+      bg: "bg-red-100 dark:bg-red-900/40",
     },
   ];
 
   const roleBadge = (role: string) => {
     const map: Record<string, string> = {
-      super: "bg-red-100 text-red-700",
-      busdev: "bg-purple-100 text-purple-700",
-      apotek: "bg-green-100 text-green-700",
+      super: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
+      busdev:
+        "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",
+      apotek:
+        "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
     };
-    return map[role] || "bg-gray-100 text-gray-700";
+    return map[role] || "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300";
   };
 
   return (
     <AppLayout>
       <Head title="User Management" />
-      <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
+      <div className="flex flex-1 flex-col gap-6 p-4 md:p-6 dark:bg-gray-950 dark:text-gray-100">
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold">User Management</h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               Manage user details, roles, and their permissions
             </p>
           </div>
@@ -118,7 +120,7 @@ export default function UsersPage({ users }: any) {
               transition={{ delay: idx * 0.1 }}
               whileHover={{ scale: 1.05 }}
             >
-              <Card className="overflow-hidden">
+              <Card className="overflow-hidden dark:bg-gray-900 dark:border-gray-700">
                 <CardContent className="p-4 flex gap-4 items-center">
                   <div
                     className={`p-3 rounded-full ${s.bg} flex items-center justify-center`}
@@ -127,8 +129,12 @@ export default function UsersPage({ users }: any) {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold">{s.value}</h3>
-                    <p className="text-sm text-gray-500">{s.title}</p>
-                    <p className="text-xs text-gray-400">{s.desc}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {s.title}
+                    </p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500">
+                      {s.desc}
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -137,13 +143,13 @@ export default function UsersPage({ users }: any) {
         </div>
 
         {/* Users Table */}
-        <Card>
+        <Card className="dark:bg-gray-900 dark:border-gray-700">
           <CardContent className="p-4">
             <h3 className="text-lg font-bold mb-4">Users</h3>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
                 <thead>
-                  <tr className="text-left text-gray-600 border-b">
+                  <tr className="text-left text-gray-600 dark:text-gray-400 border-b dark:border-gray-700">
                     <th className="p-3">Name</th>
                     <th className="p-3">Email</th>
                     <th className="p-3">Role</th>
@@ -158,7 +164,7 @@ export default function UsersPage({ users }: any) {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: idx * 0.05 }}
-                      className="border-b hover:bg-gray-50"
+                      className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
                     >
                       <td className="p-3 font-medium">{u.name}</td>
                       <td className="p-3">{u.email}</td>
@@ -172,7 +178,7 @@ export default function UsersPage({ users }: any) {
                         </span>
                       </td>
                       <td className="p-3">
-                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">
                           active
                         </span>
                       </td>
@@ -180,8 +186,10 @@ export default function UsersPage({ users }: any) {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="flex items-center gap-1"
-                          onClick={() => (window.location.href = route('users.edit', u.id))}
+                          className="flex items-center gap-1 dark:border-gray-700 dark:text-gray-200"
+                          onClick={() =>
+                            (window.location.href = route("users.edit", u.id))
+                          }
                         >
                           <Pencil size={14} /> Edit
                         </Button>
@@ -205,7 +213,7 @@ export default function UsersPage({ users }: any) {
 
       {/* Create User Modal */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md rounded-lg">
+        <DialogContent className="max-w-md rounded-lg dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700">
           <DialogHeader>
             <DialogTitle>Create New User</DialogTitle>
           </DialogHeader>
@@ -216,8 +224,11 @@ export default function UsersPage({ users }: any) {
                 id="name"
                 value={data.name}
                 onChange={(e) => setData("name", e.target.value)}
+                className="dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
               />
-              {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+              {errors.name && (
+                <p className="text-red-500 text-sm">{errors.name}</p>
+              )}
             </div>
 
             <div>
@@ -227,8 +238,11 @@ export default function UsersPage({ users }: any) {
                 type="email"
                 value={data.email}
                 onChange={(e) => setData("email", e.target.value)}
+                className="dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
               />
-              {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email}</p>
+              )}
             </div>
 
             <div>
@@ -238,8 +252,11 @@ export default function UsersPage({ users }: any) {
                 type="password"
                 value={data.password}
                 onChange={(e) => setData("password", e.target.value)}
+                className="dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
               />
-              {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+              {errors.password && (
+                <p className="text-red-500 text-sm">{errors.password}</p>
+              )}
             </div>
 
             <div>
@@ -265,10 +282,19 @@ export default function UsersPage({ users }: any) {
             </div>
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+                className="dark:border-gray-700 dark:text-gray-200"
+              >
                 Cancel
               </Button>
-              <Button type="submit" disabled={processing} className="bg-blue-600 text-white">
+              <Button
+                type="submit"
+                disabled={processing}
+                className="bg-blue-600 text-white hover:bg-blue-700"
+              >
                 {processing ? "Saving..." : "Save"}
               </Button>
             </DialogFooter>

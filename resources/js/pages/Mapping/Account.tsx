@@ -3,7 +3,7 @@ import AppLayout from "@/layouts/app-layout";
 import { type BreadcrumbItem } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Calendar, User } from "lucide-react";
+import { Calendar, User, X } from "lucide-react";
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -25,7 +25,7 @@ export default function MappingUsers() {
     {
       id: 1,
       name: "Koperasi Desa Alun Alun Purwokerto",
-      submitted: "2025-08-21, 08:02:01 AM",
+      submitted: new Date("2025-08-21T08:02:01"),
       contact: "Agus Setyawan",
       email: "koperasidesapurwokerto@kdmp.com",
       phone: "+6285664120442",
@@ -39,7 +39,7 @@ export default function MappingUsers() {
     {
       id: 2,
       name: "Koperasi Desa Bangka",
-      submitted: "2025-08-20, 09:15:00 AM",
+      submitted: new Date("2025-08-20T09:15:00"),
       contact: "Budi Santoso",
       email: "koperasibangka@kdmp.com",
       phone: "+6281234567890",
@@ -50,11 +50,10 @@ export default function MappingUsers() {
       kabupaten: "Bangka Selatan",
       provinsi: "Bangka Belitung",
     },
-    // Card Pending
     {
       id: 3,
       name: "Koperasi Desa Maju Bersama",
-      submitted: "2025-08-22, 10:30:00 AM",
+      submitted: new Date("2025-08-22T10:30:00"),
       contact: "Siti Aminah",
       email: "koperasimajubersama@kdmp.com",
       phone: "+6281122334455",
@@ -65,11 +64,10 @@ export default function MappingUsers() {
       kabupaten: "Bumi Indah",
       provinsi: "Jawa Barat",
     },
-    // Card Reject
     {
       id: 4,
       name: "Koperasi Desa Sejahtera",
-      submitted: "2025-08-19, 07:45:00 AM",
+      submitted: new Date("2025-08-19T07:45:00"),
       contact: "Rudi Hartono",
       email: "koperasisejahtera@kdmp.com",
       phone: "+6289988776655",
@@ -91,7 +89,7 @@ export default function MappingUsers() {
     type: "approve" | "reject";
     account: any;
   } | null>(null);
-  const [dateFilter, setDateFilter] = useState(""); // Tambahkan state tanggal
+  const [dateFilter, setDateFilter] = useState("");
   const [accountsState, setAccountsState] = useState(accounts);
 
   // Filtering logic
@@ -100,7 +98,7 @@ export default function MappingUsers() {
     const matchName = acc.name.toLowerCase().includes(search.toLowerCase());
     const matchDate =
       !dateFilter ||
-      format(new Date(acc.submitted.split(",")[0]), "yyyy-MM-dd") === dateFilter;
+      format(acc.submitted, "yyyy-MM-dd") === dateFilter;
     return matchStatus && matchName && matchDate;
   });
 
@@ -164,20 +162,21 @@ export default function MappingUsers() {
         </div>
 
         {/* ================== ACCOUNT CARDS ================== */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredAccounts.length > 0 ? (
             filteredAccounts.map((acc) => (
               <Card
                 key={acc.id}
-                className="border border-gray-200 dark:border-gray-700 shadow-sm dark:bg-gray-800"
+                className="border border-gray-200 dark:border-gray-700 shadow-md dark:bg-gray-800 hover:shadow-lg hover:scale-[1.01] transition-all duration-300 rounded-2xl"
               >
-                <CardContent className="p-4 flex flex-col gap-3">
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-bold text-gray-900 dark:text-gray-100">
+                <CardContent className="p-5 flex flex-col gap-4">
+                  {/* Header */}
+                  <div className="flex justify-between items-start">
+                    <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100">
                       {acc.name}
                     </h3>
                     <span
-                      className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                      className={`px-3 py-1 text-xs font-semibold rounded-full shadow-sm ${
                         acc.status === "Pending"
                           ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
                           : acc.status === "Approved"
@@ -188,8 +187,10 @@ export default function MappingUsers() {
                       {acc.status}
                     </span>
                   </div>
+
+                  {/* Info */}
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Submitted on {acc.submitted}
+                    📅 {format(acc.submitted, "yyyy-MM-dd, hh:mm:ss a")}
                   </p>
                   <p className="text-sm text-gray-700 dark:text-gray-300">
                     👤 {acc.contact}
@@ -201,10 +202,11 @@ export default function MappingUsers() {
                     📞 {acc.phone}
                   </p>
 
+                  {/* Buttons */}
                   <div className="flex gap-3 mt-3">
                     <Button
                       variant="outline"
-                      className="flex-1"
+                      className="flex-1 border-gray-300 dark:border-gray-600 hover:bg-blue-50 hover:border-blue-500 hover:text-blue-600 transition-colors"
                       onClick={() => setSelectedAccount(acc)}
                     >
                       View Details
@@ -212,8 +214,7 @@ export default function MappingUsers() {
                     {acc.status === "Pending" && (
                       <>
                         <Button
-                          variant="default"
-                          className="flex-1 bg-green-600 hover:bg-green-700"
+                          className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-md transition-colors"
                           onClick={() =>
                             setConfirmAction({ type: "approve", account: acc })
                           }
@@ -221,8 +222,7 @@ export default function MappingUsers() {
                           Approve
                         </Button>
                         <Button
-                          variant="destructive"
-                          className="flex-1"
+                          className="flex-1 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-md transition-colors"
                           onClick={() =>
                             setConfirmAction({ type: "reject", account: acc })
                           }
@@ -241,61 +241,23 @@ export default function MappingUsers() {
             </p>
           )}
         </div>
-      </div>
 
-      {/* ================== DETAIL MODAL ================== */}
-      <Dialog open={!!selectedAccount} onOpenChange={() => setSelectedAccount(null)}>
-        <DialogContent className="max-w-2xl rounded-2xl shadow-lg dark:bg-gray-900 dark:border-gray-700 w-full">
-          <DialogHeader>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="mr-2"
-                onClick={() => setSelectedAccount(null)}
-              >
-               
-              </Button>
-              <DialogTitle className="flex items-center gap-2 text-lg font-bold text-blue-600 dark:text-blue-400">
-                <User className="w-5 h-5" /> Account Details
-              </DialogTitle>
-            </div>
-          </DialogHeader>
-
-          {selectedAccount && (
-            <form className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-              {/* Left Column */}
-              <div className="space-y-4">
-                {["name", "contact", "email", "phone"].map((field) => (
-                  <div key={field}>
-                    <label className="text-sm font-medium text-gray-600 dark:text-gray-400 capitalize">
-                      {field}
-                    </label>
-                    <input
-                      type="text"
-                      value={selectedAccount[field]}
-                      readOnly
-                      className="w-full rounded-md border bg-gray-50 dark:bg-gray-800 dark:border-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100"
-                    />
-                  </div>
-                ))}
+        {/* ================== DETAIL MODAL ================== */}
+        <Dialog open={!!selectedAccount} onOpenChange={() => setSelectedAccount(null)}>
+          <DialogContent className="max-w-2xl rounded-2xl shadow-lg dark:bg-gray-900 dark:border-gray-700 w-full">
+            <DialogHeader>
+              <div className="flex items-center gap-2 justify-between">
+                <DialogTitle className="flex items-center gap-2 text-lg font-bold text-blue-600 dark:text-blue-400">
+                  <User className="w-5 h-5" /> Account Details
+                </DialogTitle>
               </div>
+            </DialogHeader>
 
-              {/* Right Column */}
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    Waktu Pendaftaran
-                  </label>
-                  <input
-                    type="text"
-                    value={selectedAccount.submitted}
-                    readOnly
-                    className="w-full rounded-md border bg-gray-50 dark:bg-gray-800 dark:border-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100"
-                  />
-                </div>
-                {["address", "kelurahan", "kecamatan", "kabupaten", "provinsi"].map(
-                  (field) => (
+            {selectedAccount && (
+              <form className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                {/* Left Column */}
+                <div className="space-y-4">
+                  {["name", "contact", "email", "phone"].map((field) => (
                     <div key={field}>
                       <label className="text-sm font-medium text-gray-600 dark:text-gray-400 capitalize">
                         {field}
@@ -307,54 +269,76 @@ export default function MappingUsers() {
                         className="w-full rounded-md border bg-gray-50 dark:bg-gray-800 dark:border-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100"
                       />
                     </div>
-                  )
-                )}
-              </div>
-            </form>
-          )}
-          {/* Responsive: stack fields on mobile */}
-          <style>{`
-            @media (max-width: 640px) {
-              .grid-cols-1, .md\\:grid-cols-2 {
-                grid-template-columns: 1fr !important;
-              }
-            }
-          `}</style>
-        </DialogContent>
-      </Dialog>
+                  ))}
+                </div>
 
-      {/* ================== CONFIRMATION MODAL ================== */}
-      <Dialog open={!!confirmAction} onOpenChange={() => setConfirmAction(null)}>
-        {confirmAction && (
-          <DialogContent className="max-w-md rounded-xl dark:bg-gray-900 dark:border-gray-700">
-            <DialogHeader>
-              <DialogTitle className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                Konfirmasi {confirmAction.type === "approve" ? "Approve" : "Reject"}
-              </DialogTitle>
-            </DialogHeader>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Apakah Anda yakin ingin{" "}
-              <b>
-                {confirmAction.type === "approve" ? "Menyetujui" : "Menolak"}
-              </b>{" "}
-              akun <b>{confirmAction.account.name}</b>?
-            </p>
-            <DialogFooter className="mt-4 flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setConfirmAction(null)}>
-                Batal
-              </Button>
-              <Button
-                variant={confirmAction.type === "approve" ? "default" : "destructive"}
-                onClick={() =>
-                  handleConfirm(confirmAction.type, confirmAction.account)
-                }
-              >
-                Ya, {confirmAction.type === "approve" ? "Setujui" : "Tolak"}
-              </Button>
-            </DialogFooter>
+                {/* Right Column */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      Waktu Pendaftaran
+                    </label>
+                    <input
+                      type="text"
+                      value={format(selectedAccount.submitted, "yyyy-MM-dd, hh:mm:ss a")}
+                      readOnly
+                      className="w-full rounded-md border bg-gray-50 dark:bg-gray-800 dark:border-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100"
+                    />
+                  </div>
+                  {["address", "kelurahan", "kecamatan", "kabupaten", "provinsi"].map(
+                    (field) => (
+                      <div key={field}>
+                        <label className="text-sm font-medium text-gray-600 dark:text-gray-400 capitalize">
+                          {field}
+                        </label>
+                        <input
+                          type="text"
+                          value={selectedAccount[field]}
+                          readOnly
+                          className="w-full rounded-md border bg-gray-50 dark:bg-gray-800 dark:border-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100"
+                        />
+                      </div>
+                    )
+                  )}
+                </div>
+              </form>
+            )}
           </DialogContent>
-        )}
-      </Dialog>
+        </Dialog>
+
+        {/* ================== CONFIRMATION MODAL ================== */}
+        <Dialog open={!!confirmAction} onOpenChange={() => setConfirmAction(null)}>
+          {confirmAction && (
+            <DialogContent className="max-w-md rounded-xl dark:bg-gray-900 dark:border-gray-700">
+              <DialogHeader>
+                <DialogTitle className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                  Konfirmasi {confirmAction.type === "approve" ? "Approve" : "Reject"}
+                </DialogTitle>
+              </DialogHeader>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Apakah Anda yakin ingin{" "}
+                <b>
+                  {confirmAction.type === "approve" ? "Menyetujui" : "Menolak"}
+                </b>{" "}
+                akun <b>{confirmAction.account.name}</b>?
+              </p>
+              <DialogFooter className="mt-4 flex justify-end gap-2">
+                <Button variant="outline" onClick={() => setConfirmAction(null)}>
+                  Batal
+                </Button>
+                <Button
+                  variant={confirmAction.type === "approve" ? "default" : "destructive"}
+                  onClick={() =>
+                    handleConfirm(confirmAction.type, confirmAction.account)
+                  }
+                >
+                  Ya, {confirmAction.type === "approve" ? "Setujui" : "Tolak"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          )}
+        </Dialog>
+      </div>
     </AppLayout>
   );
 }

@@ -13,8 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seeder user dummy (random 10)
-        User::factory(10)->create();
+        $this->call([
+        OrderSeeder::class,
+    ]);
+
+        // // Seeder user dummy (random 10)
+        // User::factory(10)->create();
 
         // Seeder user test (biasa)
         User::factory()->create([
@@ -46,4 +50,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'super',
         ]);
     }
+
+
+
 }
