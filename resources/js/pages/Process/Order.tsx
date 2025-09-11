@@ -4,14 +4,23 @@ import { CheckCircle2, FileText } from "lucide-react";
 import { Head } from "@inertiajs/react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import ConfirmPopup from "@/components/confirm-popup";
+import { useToastStore } from "@/components/ui/use-toast";
 
 export default function PurchaseOrderDetail({ purchaseOrder }: any) {
   const [status, setStatus] = useState(purchaseOrder.status || "Process");
   const [hasDO, setHasDO] = useState(purchaseOrder.hasDeliveryOrder || false);
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const { toast } = useToastStore();
 
   const handleCreateDO = () => {
     setHasDO(true);
     setStatus("On Delivery");
+    toast({
+      title: "Delivery Order berhasil dibuat",
+      description: `DO untuk Purchase Order ${purchaseOrder.id} telah dibuat.`,
+      variant: "success",
+    });
   };
 
   const statusClass =
@@ -90,8 +99,12 @@ export default function PurchaseOrderDetail({ purchaseOrder }: any) {
                       <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                         <td className="p-2">{p.name}</td>
                         <td className="p-2 text-center">{p.qty}</td>
-                        <td className="p-2 text-right">Rp {p.unitPrice.toLocaleString("id-ID")}</td>
-                        <td className="p-2 text-right">Rp {p.subtotal.toLocaleString("id-ID")}</td>
+                        <td className="p-2 text-right">
+                          Rp {p.unitPrice.toLocaleString("id-ID")}
+                        </td>
+                        <td className="p-2 text-right">
+                          Rp {p.subtotal.toLocaleString("id-ID")}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -112,7 +125,9 @@ export default function PurchaseOrderDetail({ purchaseOrder }: any) {
               <h2 className="font-semibold">Delivery Information</h2>
               <div className="text-sm text-gray-700 dark:text-gray-300">
                 <p className="font-medium">Tujuan Delivery</p>
-                <p className="text-gray-600 dark:text-gray-400">{purchaseOrder.delivery_address}</p>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {purchaseOrder.delivery_address}
+                </p>
               </div>
               <div className="text-sm">
                 <p className="font-medium">Estimated Delivery</p>
@@ -120,7 +135,9 @@ export default function PurchaseOrderDetail({ purchaseOrder }: any) {
               </div>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <p className="text-gray-500 dark:text-gray-400">Delivery Order Create Date</p>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Delivery Order Create Date
+                  </p>
                   <p className="font-medium">{hasDO ? purchaseOrder.date : "-"}</p>
                 </div>
                 <div>
@@ -136,8 +153,14 @@ export default function PurchaseOrderDetail({ purchaseOrder }: any) {
               {[
                 { label: "Total Products", value: purchaseOrder.products.length },
                 { label: "Total Quantity", value: purchaseOrder.qty },
-                { label: "Sub Total Order", value: `Rp ${purchaseOrder.subtotal.toLocaleString("id-ID")}` },
-                { label: "PPN (11%)", value: `Rp ${purchaseOrder.ppn.toLocaleString("id-ID")}` },
+                {
+                  label: "Sub Total Order",
+                  value: `Rp ${purchaseOrder.subtotal.toLocaleString("id-ID")}`,
+                },
+                {
+                  label: "PPN (11%)",
+                  value: `Rp ${purchaseOrder.ppn.toLocaleString("id-ID")}`,
+                },
               ].map((item, idx) => (
                 <div key={idx} className="flex justify-between text-sm">
                   <span>{item.label}</span>
@@ -151,13 +174,23 @@ export default function PurchaseOrderDetail({ purchaseOrder }: any) {
               </div>
 
               {status === "Process" && !hasDO && (
-                <Button
-                  onClick={handleCreateDO}
-                  className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
-                >
-                  <FileText className="w-4 h-4" />
-                  Buat Delivery Order
-                </Button>
+                <>
+                  <Button
+                    onClick={() => setOpenConfirm(true)}
+                    className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+                  >
+                    <FileText className="w-4 h-4" />
+                    Buat Delivery Order
+                  </Button>
+
+                  <ConfirmPopup
+                    open={openConfirm}
+                    onClose={() => setOpenConfirm(false)}
+                    onConfirm={handleCreateDO}
+                    title="Buat Delivery Order"
+                    description={`Apakah Anda yakin ingin membuat Delivery Order untuk PO ${purchaseOrder.id}?`}
+                  />
+                </>
               )}
             </Card>
           </div>
